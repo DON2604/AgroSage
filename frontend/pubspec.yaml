@@ -23,8 +23,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets\farm_logo.png
-    - assets\bg.jpg
-    - assets\image.png
-    - assets\asset1.png
+    - assets/farm_logo.png
+    - assets/bg.jpg
+    - assets/image.png
+    - assets/asset1.png
 
