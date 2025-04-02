@@ -73,6 +73,7 @@ def w_agent(location):
 
     db_chain = SQLDatabaseChain.from_llm(llm, db, verbose=True)
     qns1 = db_chain("Find the Crop_Type with respect to Crop_Yield_ton and Sustainability_Score in descending order")
+    print(qns1["result"])
     gen_query = extract_sql_query(qns1["result"])
     querydata = run_query(gen_query)
 

@@ -1,43 +1,84 @@
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class ScrollableList extends StatelessWidget {
   const ScrollableList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    double cardSize = MediaQuery.of(context).size.width * 0.5; 
+    double cardSize = MediaQuery.of(context).size.width * 0.5;
 
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 7),
-      itemCount: 30,
-      itemBuilder: (context, index) {
-        return Align(
-          alignment: Alignment.centerLeft, 
-          child: SizedBox(
+    return Center(
+      child: CarouselSlider.builder(
+        options: CarouselOptions(
+          height: 220,
+          scrollDirection: Axis.vertical,
+          enlargeCenterPage: true,
+          autoPlay: true,
+          autoPlayInterval: const Duration(seconds: 3),
+        ),
+        itemCount: 30,
+        itemBuilder: (context, index, realIndex) {
+          return SizedBox(
             width: cardSize,
-            height: 200, 
             child: Card(
-              color: Colors.white, 
-              margin: const EdgeInsets.only(bottom: 7),
+              color: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10), 
+                borderRadius: BorderRadius.circular(20),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center, 
+              child: Row(
                 children: [
-                  Image.asset('assets/asset1.png', width: 50, height: 50, fit: BoxFit.cover),
-                  const SizedBox(height: 10), // Spacing
-                  Text(
-                    "Day ${index + 1}",
-                    style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                  SizedBox(width: 5),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+
+                      height:150,
+                      width:150,
+                      decoration: BoxDecoration(
+                        image: const DecorationImage(
+              image: AssetImage("assets/asset1.png"),
+              fit: BoxFit.cover,
+            ),
+                      borderRadius:BorderRadius.circular(20),
+                      border: Border.all(color: Colors.black) 
+                    ),
+                    //child: Image.asset('assets/asset1.png'),
                   ),
-                  const Text("Practice Sustainable Farming", textAlign: TextAlign.center),
+                  SizedBox(width:2),
+                  
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      
+                      const SizedBox(height: 10),
+                      Text(
+                        "Olive Fields",//name of any cropssss
+                        style:GoogleFonts.poppins(
+                        color: Color.fromARGB(255, 48, 153, 41), fontWeight: FontWeight.bold, fontSize: 24),
+                      ),
+                      Text("Harvest on Day ${index + 1} ", textAlign: TextAlign.center),
+                      Row(
+                        children: [
+                          Icon(
+                            size:25,
+                            Icons.energy_savings_leaf_rounded,
+                            color: Color.fromARGB(255, 48, 153, 41),),
+                          Text(
+                        "Rs 7500/kg",
+                        style:GoogleFonts.poppins(
+                        color: Color.fromARGB(255, 48, 153, 41), fontWeight: FontWeight.bold, fontSize: 16),)
+                        ],
+                      )
+                      
+                    ],
+                  ),
                 ],
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

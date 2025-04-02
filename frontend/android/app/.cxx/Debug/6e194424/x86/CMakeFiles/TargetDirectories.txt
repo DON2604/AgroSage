@@ -1,0 +1,2 @@
+E:/accenture-hack/frontend/android/app/.cxx/Debug/6e194424/x86/CMakeFiles/edit_cache.dir
+E:/accenture-hack/frontend/android/app/.cxx/Debug/6e194424/x86/CMakeFiles/rebuild_cache.dir

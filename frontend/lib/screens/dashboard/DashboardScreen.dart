@@ -3,7 +3,6 @@ import './widgets/background_image.dart';
 import './widgets/carousel_section.dart';
 import './widgets/greeting_weather.dart';
 import './widgets/scrollable_list.dart';
-import './widgets/bottom_navbar.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -28,8 +27,13 @@ class DashboardScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 15),
-              Expanded(child: ScrollableList()),
-              BottomNavBar(),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: SizedBox(
+                  width: 626,
+                  child: ScrollableList(),
+                ),
+              ),
             ],
           ),
         ],
