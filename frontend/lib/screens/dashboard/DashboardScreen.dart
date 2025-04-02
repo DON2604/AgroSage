@@ -3,17 +3,13 @@ import './widgets/background_image.dart';
 import './widgets/carousel_section.dart';
 import './widgets/greeting_weather.dart';
 import './widgets/scrollable_list.dart';
+import './widgets/side_panel.dart'; // Import the new widget
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final sh = MediaQuery.of(context).size.height;
-    final sw = MediaQuery.of(context).size.width;
-    const vpad = 20.0; 
-    const hpad = 24.0; 
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Stack(
@@ -46,22 +42,13 @@ class DashboardScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: vpad,
-                  bottom: vpad,
-                  right: hpad, 
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: SizedBox(
-                    width: sw * 0.55 - hpad,
-                    height: sh - (2 * vpad),
-                    child: const ColoredBox(
-                      color: Color.fromARGB(255, 227, 226, 223),
-                    ),
-                  ),
-                ),
+              const SidePanel(
+                widthFactor: 0.55,
+                verticalPadding: 20,
+                horizontalPadding: 16,
+                borderRadius: 20,
+                child: Text("sjdfghjgdfjkas",style: TextStyle(color: Colors.black),),//sample ke liye hata dena🫡🫡
+                // child: idhar lagao apna dashboard,
               ),
             ],
           ),
