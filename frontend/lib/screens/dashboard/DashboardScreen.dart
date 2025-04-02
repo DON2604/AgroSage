@@ -3,7 +3,7 @@ import './widgets/background_image.dart';
 import './widgets/carousel_section.dart';
 import './widgets/greeting_weather.dart';
 import './widgets/scrollable_list.dart';
-import './widgets/side_panel.dart'; // Import the new widget
+import './widgets/side_panel.dart'; 
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
