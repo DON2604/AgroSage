@@ -57,3 +57,23 @@ jobs:
           git add docs
           git commit -m "Deploy updated Flutter Web build [skip ci]" || exit 0
           git push git@github.com:DON2604/Accenture_hack.git main
+
+  deploy_pages:
+    needs: build_and_deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
