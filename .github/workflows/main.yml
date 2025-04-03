@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'docs/**'  # Ignore changes in docs folder to prevent infinite loops
 
 jobs:
   build_and_deploy:
@@ -44,6 +46,10 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Exit if no changes
+          git diff --quiet && echo "No changes to commit" && exit 0
+
           git add docs
-          git commit -m "Deploy updated Flutter Web build" || echo "No changes to commit"
+          git commit -m "Deploy updated Flutter Web build [skip ci]" || exit 0
           git push git@github.com:DON2604/Accenture_hack.git main
