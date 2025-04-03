@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'docs/**'  # Ignore changes in docs folder to prevent infinite loops
+      - 'docs/**'  # Prevents infinite deployment loops
 
 jobs:
   build_and_deploy:
@@ -34,6 +34,10 @@ jobs:
         run: |
           rm -rf docs
           mv frontend/build/web docs
+
+      - name: Remove <base href="/"> from index.html
+        run: |
+          sed -i '/<base href="\/">/d' docs/index.html
 
       - name: Setup SSH Key for Pushing
         run: |
