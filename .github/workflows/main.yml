@@ -3,7 +3,7 @@ name: Deploy Flutter Web to GitHub Pages (Same Branch)
 on:
   push:
     branches:
-      - main  
+      - main 
 
 jobs:
   build_and_deploy:
@@ -34,9 +34,11 @@ jobs:
           mv frontend/build/web docs
 
       - name: Commit and Push to Same Branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add docs
           git commit -m "Deploy updated Flutter Web build" || echo "No changes to commit"
-          git push origin main
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/DON2604/Accenture_hack.git main
