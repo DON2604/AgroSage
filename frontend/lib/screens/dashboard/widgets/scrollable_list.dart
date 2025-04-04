@@ -15,7 +15,7 @@ class ScrollableList extends StatelessWidget {
           height: 220,
           scrollDirection: Axis.vertical,
           enlargeCenterPage: true,
-          autoPlay: true,
+          autoPlay: false,
           autoPlayInterval: const Duration(seconds: 3),
           viewportFraction: 1
         ),

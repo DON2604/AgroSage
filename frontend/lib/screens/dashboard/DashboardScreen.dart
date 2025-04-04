@@ -1,3 +1,4 @@
+import 'package:farm_genius/screens/dashboard/widgets/right_dashboard.dart';
 import 'package:flutter/material.dart';
 import './widgets/background_image.dart';
 import './widgets/carousel_section.dart';
@@ -47,8 +48,7 @@ class DashboardScreen extends StatelessWidget {
                 verticalPadding: 20,
                 horizontalPadding: 16,
                 borderRadius: 20,
-                child: Text("sjdfghjgdfjkas",style: TextStyle(color: Colors.black),),//sample ke liye hata dena🫡🫡
-                // child: idhar lagao apna dashboard,
+                child: RightDashboard()
               ),
             ],
           ),
