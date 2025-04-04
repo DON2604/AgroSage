@@ -12,13 +12,12 @@ class ScrollableList extends StatelessWidget {
     return Center(
       child: CarouselSlider.builder(
         options: CarouselOptions(
-          height: 220,
-          scrollDirection: Axis.vertical,
-          enlargeCenterPage: true,
-          autoPlay: false,
-          autoPlayInterval: const Duration(seconds: 3),
-          viewportFraction: 1
-        ),
+            height: 220,
+            scrollDirection: Axis.vertical,
+            enlargeCenterPage: true,
+            autoPlay: false,
+            autoPlayInterval: const Duration(seconds: 3),
+            viewportFraction: 1),
         itemCount: 30,
         itemBuilder: (context, index, realIndex) {
           return SizedBox(
@@ -34,44 +33,47 @@ class ScrollableList extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 10),
 
-                      height:150,
-                      width:150,
-                      decoration: BoxDecoration(
+                    height: 150,
+                    width: 150,
+                    decoration: BoxDecoration(
                         image: const DecorationImage(
-              image: AssetImage("assets/asset1.png"),
-              fit: BoxFit.cover,
-            ),
-                      borderRadius:BorderRadius.circular(20),
-                      border: Border.all(color: Colors.black) 
-                    ),
+                          image: AssetImage("assets/asset1.png"),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.black)),
                     //child: Image.asset('assets/asset1.png'),
                   ),
-                  SizedBox(width:2),
-                  
+                  SizedBox(width: 2),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      
                       const SizedBox(height: 10),
                       Text(
-                        "Olive Fields",//name of any cropssss
-                        style:GoogleFonts.poppins(
-                        color: Color.fromARGB(255, 48, 153, 41), fontWeight: FontWeight.bold, fontSize: 24),
+                        "Olive Fields", //name of any cropssss
+                        style: GoogleFonts.poppins(
+                            color: Color.fromARGB(255, 48, 153, 41),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24),
                       ),
-                      Text("Harvest on Day ${index + 1} ", textAlign: TextAlign.center),
+                      Text("Harvest on Day ${index + 1} ",
+                          textAlign: TextAlign.center),
                       Row(
                         children: [
                           Icon(
-                            size:25,
+                            size: 25,
                             Icons.energy_savings_leaf_rounded,
-                            color: Color.fromARGB(255, 48, 153, 41),),
+                            color: Color.fromARGB(255, 48, 153, 41),
+                          ),
                           Text(
-                        "Rs 7500/kg",
-                        style:GoogleFonts.poppins(
-                        color: Color.fromARGB(255, 48, 153, 41), fontWeight: FontWeight.bold, fontSize: 16),)
+                            "Rs 7500/kg",
+                            style: GoogleFonts.poppins(
+                                color: Color.fromARGB(255, 48, 153, 41),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          )
                         ],
                       )
-                      
                     ],
                   ),
                 ],

@@ -1,9 +1,9 @@
 from langchain_groq import ChatGroq
 from langchain.prompts import PromptTemplate
 from langchain.schema.runnable import RunnableParallel
-from langchain.sql_database import SQLDatabase
+from langchain_community.utilities import SQLDatabase
 from langchain_experimental.sql import SQLDatabaseChain 
-from langchain.tools import DuckDuckGoSearchRun
+from langchain_community.tools import DuckDuckGoSearchRun
 from langchain.agents import Tool
 from dotenv import load_dotenv
 import os
@@ -16,6 +16,7 @@ db = SQLDatabase.from_uri(f"sqlite:///{db_path}")
 
 sys.path.append(str(Path(__file__).parent.parent))
 from modules.query_extract_run import extract_sql_query, run_query
+from modules.memory_handler import store_crux  # Import store_crux function
 
 load_dotenv()
 groq_api_key = os.getenv("GROQ_API_KEY")
@@ -122,6 +123,11 @@ def carbon_footprint_analyzer():
         "farm_data": farm_data_str,
         "farm_str": farm_str
     })
+
+    # Store key insights into memory (update instead of adding new rows)
+    store_crux("carbon_footprint_agent_insight", analysis_result["carbon_calc"].content.strip(), update=True)
+    store_crux("carbon_footprint_agent_recommendation", analysis_result["reduction_insights"].content.strip(), update=True)
+    store_crux("carbon_footprint_agent_trends", analysis_result["web_carbon_trends"].content.strip(), update=True)
 
     print(analysis_result["carbon_calc"].content.strip())
     print(analysis_result["reduction_insights"].content.strip())

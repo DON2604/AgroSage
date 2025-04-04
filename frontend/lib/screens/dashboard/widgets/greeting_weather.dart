@@ -9,7 +9,6 @@ class GreetingWeather extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18),
       child: Row(
-
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -20,19 +19,26 @@ class GreetingWeather extends StatelessWidget {
               ),
               const Text(
                 "16.0°C",
-                style: TextStyle(fontSize: 75, color: Colors.white, letterSpacing: -2),
+                style: TextStyle(
+                    fontSize: 75, color: Colors.white, letterSpacing: -2),
               ),
               const WeatherInfo(),
             ],
           ),
-          SizedBox(width: 50,),
+          SizedBox(
+            width: 50,
+          ),
           Column(
             children: [
               const Text(
                 "☁️ Partly Cloudy",
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: Colors.white),
+                style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white),
               ),
-              Text(getCurrentDate(), style: const TextStyle(color: Colors.white, fontSize: 12)),
+              Text(getCurrentDate(),
+                  style: const TextStyle(color: Colors.white, fontSize: 12)),
             ],
           ),
         ],
@@ -57,10 +63,12 @@ class WeatherInfo extends StatelessWidget {
       children: [
         const SizedBox(width: 10),
         const Icon(Icons.water_drop, color: Colors.white),
-        Text("${moisture.toStringAsFixed(1)}%", style: const TextStyle(color: Colors.white)),
-        const SizedBox(width:40),
+        Text("${moisture.toStringAsFixed(1)}%",
+            style: const TextStyle(color: Colors.white)),
+        const SizedBox(width: 40),
         const Icon(Icons.air_rounded, color: Colors.white),
-        Text("${humidity.toStringAsFixed(1)}%", style: const TextStyle(color: Colors.white)),
+        Text("${humidity.toStringAsFixed(1)}%",
+            style: const TextStyle(color: Colors.white)),
       ],
     );
   }

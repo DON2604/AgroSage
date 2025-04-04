@@ -1,9 +1,9 @@
 from langchain_groq import ChatGroq
 from langchain.prompts import PromptTemplate
 from langchain.schema.runnable import RunnableParallel
-from langchain.sql_database import SQLDatabase
+from langchain_community.utilities import SQLDatabase
 from langchain_experimental.sql import SQLDatabaseChain 
-from langchain.tools import DuckDuckGoSearchRun
+from langchain_community.tools import DuckDuckGoSearchRun
 from langchain.agents import Tool
 from dotenv import load_dotenv
 import os
@@ -16,6 +16,7 @@ db = SQLDatabase.from_uri(f"sqlite:///{db_path}")
 
 sys.path.append(str(Path(__file__).parent.parent))
 from modules.query_extract_run import extract_sql_query, run_query
+from modules.memory_handler import store_crux  # Import store_crux function
 
 load_dotenv()
 groq_api_key = os.getenv("GROQ_API_KEY")
@@ -130,6 +131,11 @@ def market_trend_analyzer(crop_type):
         "crop_type": crop_type,
         "querycropstr": querycropstr.strip()  
     })
+
+    # Store key insights into memory (update instead of adding new rows)
+    store_crux("market_trend_agent_market_analysis", analysis_result["market_analysis"].content.strip(), update=True)
+    store_crux("market_trend_agent_top3_comparison", analysis_result["top3_market_comparison"].content.strip(), update=True)
+    store_crux("market_trend_agent_web_trends", analysis_result["web_market_trends"].content.strip(), update=True)
 
     print(analysis_result["market_analysis"].content.strip())
     print(analysis_result["top3_market_comparison"].content.strip())

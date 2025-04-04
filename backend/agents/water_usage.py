@@ -1,9 +1,9 @@
 from langchain_groq import ChatGroq
 from langchain.prompts import PromptTemplate
 from langchain.schema.runnable import RunnableParallel
-from langchain.sql_database import SQLDatabase
+from langchain_community.utilities import SQLDatabase
 from langchain_experimental.sql import SQLDatabaseChain 
-from langchain.tools import DuckDuckGoSearchRun
+from langchain_community.tools import DuckDuckGoSearchRun
 from langchain.agents import Tool
 from dotenv import load_dotenv
 import os
@@ -16,6 +16,7 @@ db = SQLDatabase.from_uri(f"sqlite:///{db_path}")
 
 sys.path.append(str(Path(__file__).parent.parent))
 from modules.query_extract_run import extract_sql_query, run_query
+from modules.memory_handler import store_crux  # Import store_crux function
 
 load_dotenv()
 groq_api_key = os.getenv("GROQ_API_KEY")
@@ -132,8 +133,21 @@ def water_usage_tracker_agent():
         "farm_str": farm_str
     })
 
+    # Store key insights into memory (update instead of adding new rows)
+    store_crux("water_usage_agent_farm_data", farm_data, update=True)
+    store_crux("water_usage_agent_calculation", analysis_result["water_calc"].content.strip(), update=True)
+    store_crux("water_usage_agent_conservation", analysis_result["conservation_insights"].content.strip(), update=True)
+    store_crux("water_usage_agent_trends", analysis_result["web_water_trends"].content.strip(), update=True)
 
-    print(analysis_result["water_calc"].content.strip())
-    print(analysis_result["conservation_insights"].content.strip())
-    print(analysis_result["web_water_trends"].content.strip())
+    print("Farm Data:", farm_data)
+    print("Water Usage Calculation:", analysis_result["water_calc"].content.strip())
+    print("Conservation Insights:", analysis_result["conservation_insights"].content.strip())
+    print("Web Water Trends:", analysis_result["web_water_trends"].content.strip())
+
+    return {
+        "farm_data": farm_data,
+        "water_usage_calculation": analysis_result["water_calc"].content.strip(),
+        "conservation_insights": analysis_result["conservation_insights"].content.strip(),
+        "web_water_trends": analysis_result["web_water_trends"].content.strip()
+    }
 

@@ -1,10 +1,10 @@
-import 'package:farm_genius/screens/dashboard/widgets/right_dashboard.dart';
+import 'package:farm_genius/screens/dashboard/widgets/weather_dashboard.dart';
 import 'package:flutter/material.dart';
 import './widgets/background_image.dart';
 import './widgets/carousel_section.dart';
 import './widgets/greeting_weather.dart';
 import './widgets/scrollable_list.dart';
-import './widgets/side_panel.dart'; 
+import './widgets/side_panel.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -25,31 +25,30 @@ class DashboardScreen extends StatelessWidget {
                     SizedBox(height: 160),
                     GreetingWeather(),
                     SizedBox(height: 20),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: SizedBox(
-                        width: 626,
-                        child: CarouselSection(),
-                      ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 13),
+                      child: CarouselSection(),
                     ),
                     SizedBox(height: 15),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: SizedBox(
                         width: 626,
-                        child: ScrollableList(),
+                        child: Padding(
+                          padding: EdgeInsets.only(left:13.0),
+                          child: ScrollableList(),
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
               const SidePanel(
-                widthFactor: 0.55,
-                verticalPadding: 20,
-                horizontalPadding: 16,
-                borderRadius: 20,
-                child: RightDashboard()
-              ),
+                  widthFactor: 0.55,
+                  verticalPadding: 20,
+                  horizontalPadding: 16,
+                  borderRadius: 20,
+                  child: RightDashboard()),
             ],
           ),
         ],

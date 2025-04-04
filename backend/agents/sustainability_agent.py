@@ -1,9 +1,9 @@
 from langchain_groq import ChatGroq
 from langchain.prompts import PromptTemplate
 from langchain.schema.runnable import RunnableParallel
-from langchain.sql_database import SQLDatabase
+from langchain_community.utilities import SQLDatabase
 from langchain_experimental.sql import SQLDatabaseChain 
-from langchain.tools import DuckDuckGoSearchRun
+from langchain_community.tools import DuckDuckGoSearchRun
 from langchain.agents import Tool
 from dotenv import load_dotenv
 import os
@@ -18,6 +18,7 @@ db = SQLDatabase.from_uri(f"sqlite:///{db_path}")
 
 sys.path.append(str(Path(__file__).parent.parent))
 from modules.query_extract_run import extract_sql_query, run_query
+from modules.memory_handler import store_crux  # Import store_crux function
 
 
 load_dotenv()
@@ -133,12 +134,14 @@ def farm_advisor(crop_type):
         "querycropstr": querycropstr.strip()  
     })
 
+    # Store key insights into memory
+    store_crux("sustainability_agent", analysis_result["sustainability"].content.strip())
+    store_crux("sustainability_agent", analysis_result["top3_comparison"].content.strip())
+    store_crux("sustainability_agent", analysis_result["web_trends"].content.strip())
 
     print(analysis_result["sustainability"].content.strip())
     print(analysis_result["top3_comparison"].content.strip())
     print(analysis_result["web_trends"].content.strip())
-
-
 
     return {
         "sustainability_analysis": analysis_result["sustainability"].content.strip(),
