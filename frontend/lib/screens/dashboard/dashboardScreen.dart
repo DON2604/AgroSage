@@ -1,3 +1,7 @@
+import 'package:farm_genius/screens/dashboard/widgets/carbonfoot_dash.dart';
+import 'package:farm_genius/screens/dashboard/widgets/market_trend.dart';
+import 'package:farm_genius/screens/dashboard/widgets/sustain_dash.dart';
+import 'package:farm_genius/screens/dashboard/widgets/water_usage_dash.dart';
 import 'package:farm_genius/screens/dashboard/widgets/weather_dashboard.dart';
 import 'package:flutter/material.dart';
 import './widgets/background_image.dart';
@@ -11,15 +15,15 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          const BackgroundImage(),
+          BackgroundImage(),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Expanded(
+              Expanded(
                 child: Column(
                   children: [
                     SizedBox(height: 160),
@@ -43,12 +47,12 @@ class DashboardScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SidePanel(
+              SidePanel(
                   widthFactor: 0.55,
                   verticalPadding: 20,
                   horizontalPadding: 16,
                   borderRadius: 20,
-                  child: RightDashboard()),
+                  child: WaterUsageDash()), //change.....
             ],
           ),
         ],

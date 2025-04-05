@@ -84,11 +84,11 @@ def water_usage_tracker_agent():
         - Rainwater harvesting: 20% of water usage
         - AWD for Rice: 25% of water usage
         
-        Provide the response strictly in this format:
+        Provide the response strictly in this format avoid giving same crops give for differnt types:
         - Conservation Insights:
           - <Farm_ID>:
             - Crop_Type: <crop>
-            - Insights: <list of applicable strategies>
+            - Insights: <only 1 line of applicable strategies>
             - Estimated_Savings: <total savings in liters>
         """
     )
