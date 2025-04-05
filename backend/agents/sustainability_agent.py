@@ -135,9 +135,9 @@ def farm_advisor(crop_type):
     })
 
     # Store key insights into memory
-    store_crux("sustainability_agent", analysis_result["sustainability"].content.strip())
-    store_crux("sustainability_agent", analysis_result["top3_comparison"].content.strip())
-    store_crux("sustainability_agent", analysis_result["web_trends"].content.strip())
+    store_crux("sustainability_agent", analysis_result["sustainability"].content.strip(),update=True)
+    store_crux("sustainability_agent", analysis_result["top3_comparison"].content.strip(),update=True)
+    store_crux("sustainability_agent", analysis_result["web_trends"].content.strip(),update=True)
 
     print(analysis_result["sustainability"].content.strip())
     print(analysis_result["top3_comparison"].content.strip())

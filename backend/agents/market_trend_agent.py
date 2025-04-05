@@ -58,8 +58,7 @@ def market_trend_analyzer(crop_type):
         (Market_Price_per_ton, Demand_Index, Supply_Index, Competitor_Price_per_ton, Economic_Indicator, Weather_Impact_Score, Seasonal_Factor, Consumer_Trend_Index).
         
         Provide the response strictly in this format:
-        - Parameters: <list of parameters per crop_type>
-        - Analysis: <is it rising trend or non rising (True/false)>
+        - Rising or non rising inedex Analysis: <True (if rising)/False (if going down), reason 1 line>
         """
     )
 

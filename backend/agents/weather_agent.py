@@ -90,5 +90,3 @@ def w_agent(location):
         "query_data": querydata
     }
 
-
-print(w_agent("Kolkata"))
