@@ -19,9 +19,11 @@ class WeatherData {
   factory WeatherData.fromJson(Map<String, dynamic> json) {
     return WeatherData(
       cropRecommendation: CropRecommendation.fromJson(json['crop_recommendation']),
-      queryData: (json['query_data'] as List)
-          .map((item) => CropQueryData.fromJson(item))
-          .toList(),
+      queryData: json['query_data'] != null
+          ? (json['query_data'] as List)
+              .map((item) => CropQueryData.fromJson(item))
+              .toList()
+          : [],  // Default to empty list if null
       weatherCondition: WeatherCondition.fromJson(json['weather_condition']),
     );
   }
@@ -112,7 +114,7 @@ class _RightDashboardState extends State<RightDashboard> {
     });
 
     try {
-      final url = Uri.parse('http://192.168.0.101:5000/weather');
+      final url = Uri.parse('http://192.168.0.207:5000/weather');
       final response = await http.get(url).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {

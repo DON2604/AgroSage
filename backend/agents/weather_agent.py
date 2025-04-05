@@ -91,4 +91,3 @@ def w_agent(location):
     }
 
 
-print(w_agent("Kolkata"))
