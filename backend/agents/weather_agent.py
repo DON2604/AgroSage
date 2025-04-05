@@ -89,5 +89,3 @@ def w_agent(location):
         "crop_recommendation": crop_result.content.strip(),
         "query_data": querydata
     }
-
-
