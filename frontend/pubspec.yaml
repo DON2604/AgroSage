@@ -18,6 +18,8 @@ dependencies:
   provider: ^6.1.4
   http: ^1.0.0
   percent_indicator: ^4.2.2
+  font_awesome_flutter: ^10.5.0
+  smooth_page_indicator: ^1.1.0
   
   
 
@@ -33,3 +35,8 @@ flutter:
     - assets/bg.jpg
     - assets/image.png
     - assets/asset1.png
+    - assets/corn.jpeg
+    - assets/wheat.jpg
+    - assets/soybean.jpg
+    - assets/rice.webp
+    

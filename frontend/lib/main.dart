@@ -1,3 +1,4 @@
+import 'package:farm_genius/screens/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'screens/dashboard/dashboardScreen.dart';
 
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Farm Genius',
       theme: ThemeData.dark(),
-      home: const DashboardScreen(),
+      home: const LoginPage(),
     );
   }
 }
