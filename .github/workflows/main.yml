@@ -15,9 +15,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Flutter 3.29.0
+      - name: Install Flutter
         run: |
-          git clone https://github.com/flutter/flutter.git --branch 3.29.0 --depth 1
+          git clone https://github.com/flutter/flutter.git -b stable
           echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
