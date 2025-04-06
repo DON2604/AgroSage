@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../dashboard/dashboardScreen.dart'; // Import the DashboardScreen
+import '../dashboard/dashboardScreen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,8 +14,14 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   bool rememberMe = false;
-  bool isRegistering = false; // Track whether the user is on the register screen
+  bool isRegistering = false;
+  bool _isLoading = false;
+  String? _errorMessage;
+
+  // API endpoint base URL - change this to your backend URL
+  final String apiBaseUrl = 'http://192.168.0.101:5000/api'; // For Android emulator
 
   @override
   void initState() {
@@ -49,13 +57,108 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Future<void> _register() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final response = await http.post(
+        Uri.parse('$apiBaseUrl/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'name': _nameController.text,
+          'email': _emailController.text,
+          'password': _passwordController.text,
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        // Registration successful
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(data['message'])),
+        );
+        setState(() {
+          isRegistering = false; // Switch to login screen
+        });
+      } else {
+        // Registration failed
+        setState(() {
+          _errorMessage = data['message'];
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Connection error: $e';
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _login() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final response = await http.post(
+        Uri.parse('$apiBaseUrl/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': _emailController.text,
+          'password': _passwordController.text,
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        // Login successful
+        await saveCredentials();
+
+        // Save user details if needed
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userName', data['name']);
+        await prefs.setInt('userId', data['user_id']);
+
+        // Navigate to dashboard
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const DashboardScreen()),
+        );
+      } else {
+        // Login failed
+        setState(() {
+          _errorMessage = data['message'];
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Connection error: $e';
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   void handleLogin() async {
-    await saveCredentials();
-    // Navigate to DashboardScreen after login
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const DashboardScreen()),
-    );
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      setState(() {
+        _errorMessage = 'Email and password are required';
+      });
+      return;
+    }
+
+    await _login();
   }
 
   void toggleRegister() {
@@ -67,10 +170,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Set the background color to white
+      backgroundColor: Colors.white,
       body: Row(
         children: [
-          // Left side (Login/Register form)
           Expanded(
             flex: 5,
             child: Padding(
@@ -82,12 +184,10 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-
-          // Right side (Background image)
           Expanded(
             flex: 5,
             child: Container(
-              color: Colors.white, // Set the right side background to white
+              color: Colors.white,
               child: Image.asset(
                 'assets/bg.jpg',
                 fit: BoxFit.cover,
@@ -104,8 +204,8 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: const [
+        const Row(
+          children: [
             Icon(Icons.local_florist, color: Colors.green),
             SizedBox(width: 8),
             Text("AgroSage",
@@ -127,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
         const SizedBox(height: 30),
         TextField(
           controller: _emailController,
-          style: const TextStyle(color: Colors.black), // Set text color to black
+          style: const TextStyle(color: Colors.black),
           decoration: const InputDecoration(
             labelText: "Email Address",
             border: OutlineInputBorder(),
@@ -140,7 +240,7 @@ class _LoginPageState extends State<LoginPage> {
         TextField(
           controller: _passwordController,
           obscureText: true,
-          style: const TextStyle(color: Colors.black), // Set text color to black
+          style: const TextStyle(color: Colors.black),
           decoration: const InputDecoration(
             labelText: "Password",
             border: OutlineInputBorder(),
@@ -170,20 +270,35 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
         const SizedBox(height: 10),
+        if (_errorMessage != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Text(
+              _errorMessage!,
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
         Row(
           children: [
             ElevatedButton(
-              onPressed: handleLogin,
+              onPressed: _isLoading ? null : handleLogin,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 padding: const EdgeInsets.symmetric(
                     horizontal: 32, vertical: 14),
               ),
-              child: const Text("Login",style: TextStyle(color: Colors.white),),
+              child: _isLoading
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                          color: Colors.white, strokeWidth: 2),
+                    )
+                  : const Text("Login", style: TextStyle(color: Colors.white)),
             ),
             const SizedBox(width: 20),
             OutlinedButton(
-              onPressed: toggleRegister, // Switch to the register form
+              onPressed: toggleRegister,
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.green,
                 side: const BorderSide(color: Colors.green),
@@ -229,7 +344,8 @@ class _LoginPageState extends State<LoginPage> {
             style: TextStyle(color: Colors.black54)),
         const SizedBox(height: 30),
         TextField(
-          style: const TextStyle(color: Colors.black), // Set text color to black
+          controller: _nameController,
+          style: const TextStyle(color: Colors.black),
           decoration: const InputDecoration(
             labelText: "Full Name",
             border: OutlineInputBorder(),
@@ -240,7 +356,8 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 20),
         TextField(
-          style: const TextStyle(color: Colors.black), // Set text color to black
+          controller: _emailController,
+          style: const TextStyle(color: Colors.black),
           decoration: const InputDecoration(
             labelText: "Email Address",
             border: OutlineInputBorder(),
@@ -251,8 +368,9 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 20),
         TextField(
+          controller: _passwordController,
           obscureText: true,
-          style: const TextStyle(color: Colors.black), // Set text color to black
+          style: const TextStyle(color: Colors.black),
           decoration: const InputDecoration(
             labelText: "Password",
             border: OutlineInputBorder(),
@@ -262,25 +380,35 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         const SizedBox(height: 20),
+        if (_errorMessage != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Text(
+              _errorMessage!,
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
         Row(
           children: [
             ElevatedButton(
-              onPressed: () {
-                // Handle registration logic
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Registration attempted')),
-                );
-              },
+              onPressed: _isLoading ? null : _register,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 padding: const EdgeInsets.symmetric(
                     horizontal: 32, vertical: 14),
               ),
-              child: const Text("Register"),
+              child: _isLoading
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                          color: Colors.white, strokeWidth: 2),
+                    )
+                  : const Text("Register", style: TextStyle(color: Colors.white)),
             ),
             const SizedBox(width: 20),
             OutlinedButton(
-              onPressed: toggleRegister, // Switch back to the login form
+              onPressed: toggleRegister,
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.green,
                 side: const BorderSide(color: Colors.green),

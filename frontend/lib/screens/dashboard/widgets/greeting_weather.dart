@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../../utils/date_utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GreetingWeather extends StatelessWidget {
   const GreetingWeather({super.key});
+
+  Future<String> _getName() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('userName') ?? '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +19,15 @@ class GreetingWeather extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Hi, Good Morning...",
-                style: TextStyle(fontSize: 25, color: Colors.white),
+              FutureBuilder<String>(
+                future: _getName(),
+                builder: (context, snapshot) {
+                  String name = snapshot.data ?? '';
+                  return Text(
+                    "Hi, Good Morning${name.isNotEmpty ? ' $name' : ''}...",
+                    style: const TextStyle(fontSize: 25, color: Colors.white),
+                  );
+                },
               ),
               const Text(
                 "33.0°C",

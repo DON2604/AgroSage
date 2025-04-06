@@ -34,6 +34,17 @@ CREATE TABLE IF NOT EXISTS market_research (
 );
 """)
 
+# Create users table for authentication
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+''')
+
 farmer_data = pd.read_csv("data/farmer_advisor_dataset.csv")
 farmer_data.to_sql("farm_advisory", conn, if_exists="replace", index=False)
 
