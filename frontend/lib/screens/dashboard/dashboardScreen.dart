@@ -27,7 +27,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     CarbonFootprintDashboard(),
     MarketTrendDashboard(),
     WaterUsageDashboard(),
-    RightDashboard(), // Weather dashboard
+    RightDashboard(), 
     SustainabilityDashboard(),
   ];
   

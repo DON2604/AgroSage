@@ -16,7 +16,7 @@ db = SQLDatabase.from_uri(f"sqlite:///{db_path}")
 
 sys.path.append(str(Path(__file__).parent.parent))
 from modules.query_extract_run import extract_sql_query, run_query
-from modules.memory_handler import store_crux  # Import store_crux function
+from modules.memory_handler import store_crux  
 
 load_dotenv()
 groq_api_key = os.getenv("GROQ_API_KEY")
@@ -131,7 +131,7 @@ def market_trend_analyzer(crop_type):
         "querycropstr": querycropstr.strip()  
     })
 
-    # Store key insights into memory (update instead of adding new rows)
+
     store_crux("market_trend_agent_market_analysis", analysis_result["market_analysis"].content.strip(), update=True)
     store_crux("market_trend_agent_top3_comparison", analysis_result["top3_market_comparison"].content.strip(), update=True)
     store_crux("market_trend_agent_web_trends", analysis_result["web_market_trends"].content.strip(), update=True)

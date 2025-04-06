@@ -42,11 +42,9 @@ def login_user(email, password):
         db_path = script_dir.parent / "db" / "farming_memory.db"
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
-        
-        # Hash the password for comparison
+
         hashed_password = hash_password(password)
-        
-        # Check credentials
+
         cursor.execute("SELECT id, name FROM users WHERE email = ? AND password = ?", 
                       (email, hashed_password))
         user = cursor.fetchone()

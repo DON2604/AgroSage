@@ -4,7 +4,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-// WeatherData class
 class WeatherData {
   final CropRecommendation cropRecommendation;
   final List<CropQueryData> queryData;
@@ -27,7 +26,6 @@ class WeatherData {
   }
 }
 
-// CropRecommendation class
 class CropRecommendation {
   final List<String> harvestCrops;
   final List<String> plantationCrops;
@@ -48,7 +46,6 @@ class CropRecommendation {
   }
 }
 
-// CropQueryData class
 class CropQueryData {
   final String crop;
   final double value1;
@@ -69,7 +66,6 @@ class CropQueryData {
   }
 }
 
-// WeatherCondition class
 class WeatherCondition {
   final String condition;
   final String explanation;
@@ -112,7 +108,7 @@ class _RightDashboardState extends State<RightDashboard> {
     });
 
     try {
-      final url = Uri.parse('https://22bb-45-112-68-8.ngrok-free.app/weather');
+      final url = Uri.parse('https://1028-45-112-68-8.ngrok-free.app/weather');
       final response = await http.get(url,headers: {
         'Accept': 'application/json',
         'User-Agent': 'PostmanRuntime/7.36.0', 

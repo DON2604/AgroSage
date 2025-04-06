@@ -12,8 +12,8 @@ class CarouselSection extends StatelessWidget {
         enlargeCenterPage: false,
         autoPlay: false,
         enableInfiniteScroll: false,
-        viewportFraction: 0.25, // Show 4 items at once
-        padEnds: false, // Aligns the first item to the start (extreme left)
+        viewportFraction: 0.25, 
+        padEnds: false, 
       ),
       items: [
         _carouselItem("🕒 8:00 AM", "Watering of crops", "On-Progress",

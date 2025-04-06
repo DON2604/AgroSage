@@ -16,7 +16,7 @@ db = SQLDatabase.from_uri(f"sqlite:///{db_path}")
 
 sys.path.append(str(Path(__file__).parent.parent))
 from modules.query_extract_run import extract_sql_query, run_query
-from modules.memory_handler import store_crux  # Import store_crux function
+from modules.memory_handler import store_crux  
 
 load_dotenv()
 groq_api_key = os.getenv("GROQ_API_KEY")
@@ -124,7 +124,6 @@ def carbon_footprint_analyzer():
         "farm_str": farm_str
     })
 
-    # Store key insights into memory (update instead of adding new rows)
     store_crux("carbon_footprint_agent_insight", analysis_result["carbon_calc"].content.strip(), update=True)
     store_crux("carbon_footprint_agent_recommendation", analysis_result["reduction_insights"].content.strip(), update=True)
     store_crux("carbon_footprint_agent_trends", analysis_result["web_carbon_trends"].content.strip(), update=True)

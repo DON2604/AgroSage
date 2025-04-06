@@ -18,13 +18,12 @@ db = SQLDatabase.from_uri(f"sqlite:///{db_path}")
 
 sys.path.append(str(Path(__file__).parent.parent))
 from modules.query_extract_run import extract_sql_query, run_query
-from modules.memory_handler import store_crux  # Import store_crux function
+from modules.memory_handler import store_crux  
 
 
 load_dotenv()
 groq_api_key = os.getenv("GROQ_API_KEY")
 
-# Initialize Groq LLM
 llm = ChatGroq(
     model_name="llama3-70b-8192",
     temperature=0.7,
@@ -134,7 +133,6 @@ def farm_advisor(crop_type):
         "querycropstr": querycropstr.strip()  
     })
 
-    # Store key insights into memory
     store_crux("sustainability_agent", analysis_result["sustainability"].content.strip(),update=True)
     store_crux("sustainability_agent", analysis_result["top3_comparison"].content.strip(),update=True)
     store_crux("sustainability_agent", analysis_result["web_trends"].content.strip(),update=True)

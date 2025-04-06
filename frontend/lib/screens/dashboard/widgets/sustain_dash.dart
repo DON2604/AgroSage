@@ -32,7 +32,7 @@ class _SustainabilityDashboardState extends State<SustainabilityDashboard> {
 
     try {
       final response = await http
-          .get(Uri.parse('https://22bb-45-112-68-8.ngrok-free.app/sustainability'),
+          .get(Uri.parse('https://1028-45-112-68-8.ngrok-free.app/sustainability'),
           headers: {
         'Accept': 'application/json',
         'User-Agent': 'PostmanRuntime/7.36.0', 
@@ -303,7 +303,6 @@ class _SustainabilityDashboardState extends State<SustainabilityDashboard> {
   }
 
   Widget _buildParameterRadarChart(Map<String, List<num>> parameters) {
-    // Calculate averages for each parameter
     final Map<String, double> averages = {};
     parameters.forEach((key, values) {
       double sum = 0;
@@ -313,7 +312,6 @@ class _SustainabilityDashboardState extends State<SustainabilityDashboard> {
       averages[key] = sum / values.length;
     });
 
-    // Updated normalization values based on the provided sample data
     final Map<String, double> maxValues = {
       'Crop_Yield_ton': 4.0,
       'Fertilizer_Usage_kg': 200.0,
@@ -324,15 +322,12 @@ class _SustainabilityDashboardState extends State<SustainabilityDashboard> {
       'Temperature_C': 30.0,
     };
 
-    // Normalize values for radar chart (0-1 scale)
     final Map<String, double> normalizedValues = {};
     averages.forEach((key, value) {
       if (maxValues.containsKey(key)) {
         normalizedValues[key] = value / maxValues[key]!;
-        // Cap at 1.0
         if (normalizedValues[key]! > 1.0) normalizedValues[key] = 1.0;
       } else {
-        // Fallback for any unexpected parameters
         normalizedValues[key] = value / 100.0;
         if (normalizedValues[key]! > 1.0) normalizedValues[key] = 1.0;
       }

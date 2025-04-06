@@ -30,7 +30,7 @@ class _WaterUsageDashboardState extends State<WaterUsageDashboard> {
 
     try {
       final response = await http
-          .get(Uri.parse('https://22bb-45-112-68-8.ngrok-free.app/water-usage'),headers: {
+          .get(Uri.parse('https://1028-45-112-68-8.ngrok-free.app/water-usage'),headers: {
         'Accept': 'application/json',
         'User-Agent': 'PostmanRuntime/7.36.0', 
         'ngrok-skip-browser-warning': 'true',
@@ -117,19 +117,15 @@ class _WaterUsageDashboardState extends State<WaterUsageDashboard> {
               ),
               const SizedBox(height: 25),
 
-              // Total water usage summary
               _buildWaterUsageSummary(waterUsageData!.totalWaterUsageLiters),
               const SizedBox(height: 25),
 
-              // Water usage by farm chart
               _buildWaterUsageChart(waterUsageData!.farmData),
               const SizedBox(height: 25),
 
-              // Conservation insights
               _buildConservationInsights(waterUsageData!.conservationInsights),
               const SizedBox(height: 25),
 
-              // Water conservation strategies
               _buildConservationStrategies(
                   waterUsageData!.waterConservationStrategies),
               const SizedBox(height: 20),

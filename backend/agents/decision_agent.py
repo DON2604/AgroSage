@@ -5,11 +5,9 @@ import sqlite3
 import os
 import json
 
-# Load environment variables
 load_dotenv()
 groq_api_key = os.getenv("GROQ_API_KEY")
 
-# Initialize the LLM
 llm = ChatGroq(
     model_name="qwen-2.5-coder-32b",
     temperature=0.7,
@@ -33,9 +31,7 @@ class DecisionAgent:
         memory_context = "\n".join([f"{agent}: {crux}" for agent, crux in memory_data])
 
         if sender == "sustainability":
-            # Special handling for sustainability data
             try:
-                # Try to parse raw output if it's a string
                 if isinstance(raw_output, str):
                     try:
                         parsed_data = json.loads(raw_output)
@@ -43,17 +39,14 @@ class DecisionAgent:
                         parsed_data = {}
                 else:
                     parsed_data = raw_output
-                
-                # Format according to required template
+
                 return self._format_sustainability_json(parsed_data)
             except Exception as e:
                 print(f"Error formatting sustainability data: {e}")
-                # Return template with dummy data if there's an error
                 return self._format_sustainability_json({})
         elif sender == "market":
-            # Special handling for market data
             try:
-                # Try to parse raw output if it's a string
+
                 if isinstance(raw_output, str):
                     try:
                         parsed_data = json.loads(raw_output)
@@ -61,17 +54,14 @@ class DecisionAgent:
                         parsed_data = {}
                 else:
                     parsed_data = raw_output
-                
-                # Format according to required template
+
                 return self._format_market_json(parsed_data)
             except Exception as e:
                 print(f"Error formatting market data: {e}")
-                # Return template with dummy data if there's an error
                 return self._format_market_json({})
         elif sender == "carbon":
-            # Special handling for carbon data
+
             try:
-                # Try to parse raw output if it's a string
                 if isinstance(raw_output, str):
                     try:
                         parsed_data = json.loads(raw_output)
@@ -80,16 +70,16 @@ class DecisionAgent:
                 else:
                     parsed_data = raw_output
                 
-                # Format according to required template
+
                 return self._format_carbon_json(parsed_data)
             except Exception as e:
                 print(f"Error formatting carbon data: {e}")
-                # Return template with dummy data if there's an error
+
                 return self._format_carbon_json({})
         elif sender == "water":
-            # Special handling for water data
+
             try:
-                # Try to parse raw output if it's a string
+
                 if isinstance(raw_output, str):
                     try:
                         parsed_data = json.loads(raw_output)
@@ -98,11 +88,11 @@ class DecisionAgent:
                 else:
                     parsed_data = raw_output
                 
-                # Format according to required template
+
                 return self._format_water_json(parsed_data)
             except Exception as e:
                 print(f"Error formatting water data: {e}")
-                # Return template with dummy data if there's an error
+
                 return self._format_water_json({})
         else:
             # Original logic for other senders
@@ -115,7 +105,6 @@ class DecisionAgent:
             formatted_prompt = prompt.format(memory_context=memory_context, raw_output=raw_output)
             response = llm.invoke(formatted_prompt).content.strip()
 
-            # ✅ Strip markdown code block if it exists
             if response.startswith("```json") and response.endswith("```"):
                 response = response[7:-3].strip()
             elif response.startswith("```") and response.endswith("```"):
@@ -712,15 +701,14 @@ class DecisionAgent:
             ]
         }
         
-        # Use LLM to analyze and tweak values based on input data while maintaining structure
+
         if isinstance(data, dict):
-            # Create a context for the LLM to understand the data
+
             context = {
                 "template": template,
                 "raw_data": data
             }
-            
-            # Use the LLM to analyze and suggest modifications
+
             prompt = PromptTemplate.from_template(
                 "Given the following template structure and raw input data:\n\n"
                 "TEMPLATE: {template}\n\n"
@@ -734,35 +722,27 @@ class DecisionAgent:
             try:
                 response = llm.invoke(formatted_prompt).content.strip()
                 
-                # Clean up the response
                 if response.startswith("```json") and response.endswith("```"):
                     response = response[7:-3].strip()
                 elif response.startswith("```") and response.endswith("```"):
                     response = response[3:-3].strip()
                     
-                # Parse the modified template
                 modified_template = json.loads(response)
                 if isinstance(modified_template, dict) and "conservation_insights" in modified_template:
                     return modified_template
             except Exception as e:
                 print(f"Error tweaking water template values: {e}")
-                # Continue with manual merging if LLM modification fails
-        
-        # Fallback to manual merging if LLM approach fails
+
         if isinstance(data, dict):
-            # Update conservation_insights section
             if "conservation_insights" in data and isinstance(data["conservation_insights"], list):
                 template["conservation_insights"] = data["conservation_insights"]
-            
-            # Update farm_data section
+
             if "farm_data" in data and isinstance(data["farm_data"], list):
                 template["farm_data"] = data["farm_data"]
-            
-            # Update total_water_usage_liters
+
             if "total_water_usage_liters" in data:
                 template["total_water_usage_liters"] = data["total_water_usage_liters"]
-            
-            # Update water_conservation_strategies section
+
             if "water_conservation_strategies" in data and isinstance(data["water_conservation_strategies"], list):
                 template["water_conservation_strategies"] = data["water_conservation_strategies"]
         

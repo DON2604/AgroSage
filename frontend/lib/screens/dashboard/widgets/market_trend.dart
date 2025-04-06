@@ -30,7 +30,7 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
 
     try {
       final response = await http
-          .get(Uri.parse('https://22bb-45-112-68-8.ngrok-free.app/market-trends'),headers: {
+          .get(Uri.parse('https://1028-45-112-68-8.ngrok-free.app/market-trends'),headers: {
         'Accept': 'application/json',
         'User-Agent': 'PostmanRuntime/7.36.0', 
         'ngrok-skip-browser-warning': 'true', 
@@ -139,7 +139,6 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
   }
 
   Widget _buildMarketAnalysisSection(MarketAnalysis analysis) {
-    // Calculate overall trend based on number of rising trends
     final totalParameters = analysis.parameterAnalysis.length;
     final risingParameters = analysis.parameterAnalysis.values
         .where((data) => data == 'True')
@@ -251,10 +250,10 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4, // Changed from 3 to 4 for smaller cards
-        childAspectRatio: 1.5, // Adjusted for smaller cards
-        crossAxisSpacing: 8, // Reduced spacing
-        mainAxisSpacing: 8, // Reduced spacing
+        crossAxisCount: 4,
+        childAspectRatio: 1.5,
+        crossAxisSpacing: 8, 
+        mainAxisSpacing: 8,
       ),
       itemCount: analysis.parameterAnalysis.length,
       itemBuilder: (context, index) {
@@ -263,7 +262,7 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
         final isTrending = paramValue == 'True';
 
         return Container(
-          padding: const EdgeInsets.all(8), // Reduced padding
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: isTrending ? Colors.green.shade50 : Colors.red.shade50,
             borderRadius: BorderRadius.circular(8),
@@ -275,7 +274,6 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Status indicator
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
@@ -292,7 +290,6 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
                 ),
               ),
               const SizedBox(height: 4),
-              // Parameter name
               Text(
                 _getShortName(paramName),
                 textAlign: TextAlign.center,
@@ -318,12 +315,10 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
     );
   }
 
-  // Helper method to make parameter names shorter for small cards
   String _getShortName(String paramName) {
     final words = paramName.split('_');
     if (words.length <= 2) return paramName.replaceAll('_', ' ');
 
-    // For longer names, use first letters of each word except the last word
     final result = words.sublist(0, words.length - 1)
         .map((word) => word[0])
         .join('')
@@ -332,7 +327,6 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
   }
 
   Widget _buildTrendBarChart(MarketAnalysis analysis) {
-    // Count rising vs non-rising trends
     int risingCount = 0;
     int nonRisingCount = 0;
 
@@ -344,7 +338,6 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
       }
     });
 
-    // Calculate percentages
     final total = risingCount + nonRisingCount;
     final percentRising = (risingCount / total) * 100;
     final percentNonRising = (nonRisingCount / total) * 100;
@@ -967,7 +960,6 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
   }
 }
 
-// Data Models for JSON structure
 class MarketTrendData {
   final MarketAnalysis marketAnalysis;
   final Top3MarketComparison top3MarketComparison;

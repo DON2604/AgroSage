@@ -18,7 +18,7 @@ db = SQLDatabase.from_uri(f"sqlite:///{db_path}")
 sys.path.append(str(Path(__file__).parent.parent))
 from modules.query_extract_run import extract_sql_query, run_query
 from modules.weather_fetcher import fetcher
-from modules.memory_handler import store_crux  # Import store_crux function
+from modules.memory_handler import store_crux  
 
 load_dotenv()
 groq_api_key = os.getenv("GROQ_API_KEY")
@@ -78,7 +78,6 @@ def w_agent(location):
     gen_query = extract_sql_query(qns1["result"])
     querydata = run_query(gen_query)
 
-    # Store key insights into memory (update instead of adding new rows)
     store_crux("weather_agent_weather_condition", weather_condition, update=True)
     store_crux("weather_agent_crop_recommendation", crop_result.content.strip(), update=True)
 

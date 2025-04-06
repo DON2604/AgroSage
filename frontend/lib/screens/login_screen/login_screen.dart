@@ -20,8 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   String? _errorMessage;
 
-  // API endpoint base URL - change this to your backend URL
-  final String apiBaseUrl = 'http://192.168.0.101:5000/api'; // For Android emulator
+  final String apiBaseUrl = 'https://1028-45-112-68-8.ngrok-free.app/api';
 
   @override
   void initState() {
@@ -77,15 +76,13 @@ class _LoginPageState extends State<LoginPage> {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 201) {
-        // Registration successful
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(data['message'])),
         );
         setState(() {
-          isRegistering = false; // Switch to login screen
+          isRegistering = false; 
         });
       } else {
-        // Registration failed
         setState(() {
           _errorMessage = data['message'];
         });
@@ -120,21 +117,15 @@ class _LoginPageState extends State<LoginPage> {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        // Login successful
         await saveCredentials();
-
-        // Save user details if needed
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('userName', data['name']);
         await prefs.setInt('userId', data['user_id']);
-
-        // Navigate to dashboard
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const DashboardScreen()),
         );
       } else {
-        // Login failed
         setState(() {
           _errorMessage = data['message'];
         });

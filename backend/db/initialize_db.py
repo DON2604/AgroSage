@@ -34,7 +34,6 @@ CREATE TABLE IF NOT EXISTS market_research (
 );
 """)
 
-# Create users table for authentication
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -24,7 +24,7 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
 Future<void> _fetchData() async {
   try {
     final response = await http.get(
-      Uri.parse('https://22bb-45-112-68-8.ngrok-free.app/carbon-footprint'),
+      Uri.parse('https://1028-45-112-68-8.ngrok-free.app/carbon-footprint'),
       headers: {
         'Accept': 'application/json',
         'User-Agent': 'PostmanRuntime/7.36.0', 

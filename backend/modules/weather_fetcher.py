@@ -36,7 +36,7 @@ def fetcher(location="New York"):
                 "max_temp": f"{days['temperature_2m_max'][i]}°C",
                 "min_temp": f"{days['temperature_2m_min'][i]}°C",
                 "precipitation": f"{days['precipitation_sum'][i]}mm",
-                "weather_code": days['weathercode'][i]  # You can map this to text if needed
+                "weather_code": days['weathercode'][i] 
             })
         
         return {"location": location, "forecast": forecast}
