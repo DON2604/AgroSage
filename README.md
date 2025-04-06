@@ -13,6 +13,7 @@ AgriSmart is an intelligent, end-to-end agricultural advisory system designed to
 ---
 
 ## 🧠 How It Works
+![wirefr](https://github.com/user-attachments/assets/fd7ccdde-b461-4ca3-bc8b-ec12aed2c03f)
 
 1. **User Requests**  
    Farmers or systems send queries through REST API endpoints (e.g., `/sustainability`, `/market_trends`).
