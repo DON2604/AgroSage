@@ -4,62 +4,11 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - 'docs/**'  # Prevents infinite deployment loops
-
+      
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Flutter 3.29.0
-        run: |
-          git clone https://github.com/flutter/flutter.git
-          cd flutter
-          git checkout 3.29.0
-          echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
-
-      - name: Install dependencies
-        run: |
-          cd frontend
-          flutter pub get
-
-      - name: Build Flutter web
-        run: |
-          cd frontend
-          flutter build web --release
-
-      - name: Move build to /docs
-        run: |
-          rm -rf docs
-          mv frontend/build/web docs
-
-      - name: Remove <base href="/"> from index.html
-        run: |
-          sed -i '/<base href="\/">/d' docs/index.html
-
-      - name: Setup SSH Key for Pushing
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-      - name: Commit and Push to Same Branch
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Exit if no changes
-          git diff --quiet && echo "No changes to commit" && exit 0
-
-          git add docs
-          git commit -m "Deploy updated Flutter Web build [skip ci]" || exit 0
-          git push git@github.com:DON2604/Accenture_hack.git main
-
+    
   deploy_pages:
     needs: build_and_deploy
     runs-on: ubuntu-latest
