@@ -52,7 +52,7 @@ class DashboardScreen extends StatelessWidget {
                   verticalPadding: 20,
                   horizontalPadding: 16,
                   borderRadius: 20,
-                  child: WaterUsageDash()), //change.....
+                  child: CarbonFootprintDashboard()), //change.....
             ],
           ),
         ],

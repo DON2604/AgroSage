@@ -32,8 +32,8 @@ class _SustainabilityDashboardState extends State<SustainabilityDashboard> {
 
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.0.207:5000/sustainability'))
-          .timeout(const Duration(seconds: 10));
+          .get(Uri.parse('http://192.168.0.101:5000/sustainability'))
+          .timeout(const Duration(seconds: 15000));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = json.decode(response.body);
@@ -265,7 +265,7 @@ class _SustainabilityDashboardState extends State<SustainabilityDashboard> {
         minX: 0,
         maxX: scores.length - 1,
         minY: 0,
-        maxY: 1,
+        maxY: 1.0,
         lineBarsData: [
           LineChartBarData(
             spots: List.generate(
@@ -308,22 +308,29 @@ class _SustainabilityDashboardState extends State<SustainabilityDashboard> {
       averages[key] = sum / values.length;
     });
 
-    // Normalize values for radar chart (0-1 scale)
-    final Map<String, double> normalizedValues = {};
+    // Updated normalization values based on the provided sample data
     final Map<String, double> maxValues = {
       'Crop_Yield_ton': 4.0,
       'Fertilizer_Usage_kg': 200.0,
       'Pesticide_Usage_kg': 10.0,
-      'Rainfall_mm': 200.0,
+      'Rainfall_mm': 250.0,
       'Soil_Moisture': 50.0,
-      'Soil_pH': 10.0,
+      'Soil_pH': 7.5,
       'Temperature_C': 30.0,
     };
 
+    // Normalize values for radar chart (0-1 scale)
+    final Map<String, double> normalizedValues = {};
     averages.forEach((key, value) {
-      normalizedValues[key] = value / (maxValues[key] ?? 100.0);
-      // Cap at 1.0
-      if (normalizedValues[key]! > 1.0) normalizedValues[key] = 1.0;
+      if (maxValues.containsKey(key)) {
+        normalizedValues[key] = value / maxValues[key]!;
+        // Cap at 1.0
+        if (normalizedValues[key]! > 1.0) normalizedValues[key] = 1.0;
+      } else {
+        // Fallback for any unexpected parameters
+        normalizedValues[key] = value / 100.0;
+        if (normalizedValues[key]! > 1.0) normalizedValues[key] = 1.0;
+      }
     });
 
     final List<String> features = normalizedValues.keys.toList();
@@ -376,17 +383,31 @@ class _SustainabilityDashboardState extends State<SustainabilityDashboard> {
           ),
         ),
 
-        // Legend
+        // Legend with more readable formatting
         Wrap(
           spacing: 10,
           runSpacing: 8,
           children: features.map((feature) {
-            final value = averages[feature]!.toStringAsFixed(1);
+            String valueStr;
+            if (feature.contains('pH')) {
+              valueStr = averages[feature]!.toStringAsFixed(1);
+            } else if (feature.contains('Crop_Yield')) {
+              valueStr = '${averages[feature]!.toStringAsFixed(1)} ton';
+            } else if (feature.contains('_kg')) {
+              valueStr = '${averages[feature]!.toStringAsFixed(1)} kg';
+            } else if (feature.contains('Rainfall')) {
+              valueStr = '${averages[feature]!.toStringAsFixed(1)} mm';
+            } else if (feature.contains('Temperature')) {
+              valueStr = '${averages[feature]!.toStringAsFixed(1)}°C';
+            } else {
+              valueStr = averages[feature]!.toStringAsFixed(1);
+            }
+            
             return Chip(
               backgroundColor: Colors.white,
               side: BorderSide(color: Colors.green.shade100),
               label: Text(
-                '${feature.replaceAll('_', ' ')}: $value',
+                '${feature.replaceAll('_', ' ')}: $valueStr',
                 style: GoogleFonts.barlow(
                   fontSize: 12,
                   color: Colors.black87,
@@ -463,17 +484,20 @@ class _SustainabilityDashboardState extends State<SustainabilityDashboard> {
   }
 
   Widget _buildCropScoreComparisonChart(List<TopCrop> crops) {
+    final maxScore = crops.map((c) => c.score).reduce((a, b) => a > b ? a : b);
+    final roundedMax = (maxScore.ceil() / 10).ceil() * 10.0;
+    
     return BarChart(
       BarChartData(
         alignment: BarChartAlignment.spaceAround,
-        maxY: 10,
+        maxY: roundedMax > 0 ? roundedMax : 10.0,
         barTouchData: BarTouchData(
           enabled: true,
           touchTooltipData: BarTouchTooltipData(
             tooltipBgColor: Colors.white,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               return BarTooltipItem(
-                '${crops[groupIndex].crop}\nScore: ${crops[groupIndex].score}',
+                '${crops[groupIndex].crop}\nScore: ${crops[groupIndex].score.toStringAsFixed(1)}',
                 GoogleFonts.barlow(
                     color: Colors.black87, fontWeight: FontWeight.bold),
               );
@@ -505,8 +529,8 @@ class _SustainabilityDashboardState extends State<SustainabilityDashboard> {
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize: 30,
-              interval: 2,
+              reservedSize: 40,
+              interval: 2.0,
               getTitlesWidget: (value, meta) {
                 return Text(
                   value.toInt().toString(),
@@ -730,31 +754,61 @@ class _SustainabilityDashboardState extends State<SustainabilityDashboard> {
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (crop.parameters.isNotEmpty) ...[
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      children: crop.parameters.entries.take(3).map((entry) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                entry.key.replaceAll('_', ' '),
+                                style: GoogleFonts.barlow(
+                                  fontSize: 11,
+                                  color: Colors.black54,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                entry.value.toString(),
+                                style: GoogleFonts.barlow(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 6),
                 Text(
                   'Strength: ${crop.strength}',
                   style: GoogleFonts.barlow(
                     fontSize: 12,
                     color: Colors.black87,
+                    fontWeight: FontWeight.bold,
                   ),
-                  maxLines: 2,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const Spacer(),
+                const SizedBox(height: 4),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Source:',
-                      style: GoogleFonts.barlow(
-                        fontSize: 11,
-                        color: Colors.black54,
-                      ),
-                    ),
+                    Icon(Icons.source_rounded, size: 12, color: color),
+                    const SizedBox(width: 4),
                     Text(
                       crop.source,
                       style: GoogleFonts.barlow(
@@ -815,10 +869,10 @@ class SustainabilityAnalysis {
     });
 
     return SustainabilityAnalysis(
-      analysis: json['analysis'],
-      crop: json['crop'],
+      analysis: json['analysis'] ?? '',
+      crop: json['crop'] ?? '',
       parameters: parameters,
-      sustainabilityScores: List<double>.from(json['sustainability_scores']),
+      sustainabilityScores: List<double>.from(json['sustainability_scores'] ?? []),
     );
   }
 }
@@ -855,9 +909,9 @@ class TopCrop {
 
   factory TopCrop.fromJson(Map<String, dynamic> json) {
     return TopCrop(
-      crop: json['crop'],
-      parameters: json['parameters'],
-      score: json['score'].toDouble(),
+      crop: json['crop'] ?? '',
+      parameters: Map<String, dynamic>.from(json['parameters'] ?? {}),
+      score: (json['score'] ?? 0).toDouble(),
     );
   }
 }
@@ -893,10 +947,10 @@ class TrendingCrop {
 
   factory TrendingCrop.fromJson(Map<String, dynamic> json) {
     return TrendingCrop(
-      crop: json['crop'],
-      parameters: json['parameters'],
-      source: json['source'],
-      strength: json['strength'],
+      crop: json['crop'] ?? '',
+      parameters: Map<String, dynamic>.from(json['parameters'] ?? {}),
+      source: json['source'] ?? '',
+      strength: json['strength'] ?? '',
     );
   }
 }

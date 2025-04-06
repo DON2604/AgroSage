@@ -1,580 +1,374 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class WaterUsageDash extends StatefulWidget {
-  const WaterUsageDash({Key? key}) : super(key: key);
+class WaterUsageDashboard extends StatefulWidget {
+  const WaterUsageDashboard({super.key});
 
   @override
-  _WaterUsageDashState createState() => _WaterUsageDashState();
+  State<WaterUsageDashboard> createState() => _WaterUsageDashboardState();
 }
 
-class _WaterUsageDashState extends State<WaterUsageDash> {
-  bool _isLoading = true;
-  Map<String, dynamic> _sustainabilityData = {};
-  String? _error;
+class _WaterUsageDashboardState extends State<WaterUsageDashboard> {
+  bool isLoading = false;
+  String? errorMessage;
+  WaterUsageData? waterUsageData;
 
   @override
   void initState() {
     super.initState();
-    _fetchSustainabilityData();
+    _fetchWaterUsageData();
   }
 
-  Future<void> _fetchSustainabilityData() async {
+  Future<void> _fetchWaterUsageData() async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
     try {
-      final response =
-          await http.get(Uri.parse('http://192.168.0.207:5000/sustainability'));
+      final response = await http
+          .get(Uri.parse('http://192.168.0.101:5000/water-usage'))
+          .timeout(const Duration(seconds: 15));
 
       if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = json.decode(response.body);
         setState(() {
-          _sustainabilityData = json.decode(response.body);
-          _isLoading = false;
+          waterUsageData = WaterUsageData.fromJson(jsonData);
+          isLoading = false;
         });
       } else {
-        setState(() {
-          _error = 'Failed to load data: ${response.statusCode}';
-          _isLoading = false;
-        });
+        throw Exception('Server returned status code: ${response.statusCode}');
       }
     } catch (e) {
       setState(() {
-        _error = 'Error: $e';
-        _isLoading = false;
+        errorMessage = "Failed to fetch water usage data: ${e.toString()}";
+        isLoading = false;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
+    if (isLoading) {
       return const Center(
-        child: CircularProgressIndicator(),
-      );
+          child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+      ));
     }
 
-    if (_error != null) {
+    if (errorMessage != null) {
       return Center(
-        child: Text(_error!, style: TextStyle(color: Colors.red)),
-      );
-    }
-
-    return _buildDashboard();
-  }
-
-  Widget _buildDashboard() {
-    final totalWaterUsage = _sustainabilityData['water_usage_calculation']?['total_water_usage'] ?? 0.0;
-    final farmData = List<Map<String, dynamic>>.from(_sustainabilityData['farm_data'] ?? []);
-    final farmCalculations = List<Map<String, dynamic>>.from(
-        _sustainabilityData['water_usage_calculation']?['farm_calculations'] ?? []);
-    final conservationInsights = List<Map<String, dynamic>>.from(
-        _sustainabilityData['conservation_insights'] ?? []);
-    final waterConservationStrategies = List<Map<String, dynamic>>.from(
-        _sustainabilityData['web_water_trends']?['conservation_strategies'] ?? []);
-
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildHeader(totalWaterUsage),
-            const SizedBox(height: 24),
-            _buildWaterUsageByFarm(farmCalculations),
-            const SizedBox(height: 24),
-            _buildWaterSavingsPotential(conservationInsights),
-            const SizedBox(height: 24),
-            _buildInsightsSection(conservationInsights),
-            const SizedBox(height: 24),
-            _buildStrategiesSection(waterConservationStrategies),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeader(double totalWaterUsage) {
-    return Card(
-      elevation: 4,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          gradient: const LinearGradient(
-            colors: [Color(0xFF2193b0), Color(0xFF6dd5ed)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Crop Sustainability Dashboard',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                const Icon(Icons.water_drop, color: Colors.white, size: 36),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Total Water Usage',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white70,
-                      ),
-                    ),
-                    Text(
-                      '${(totalWaterUsage / 1000000).toStringAsFixed(2)} Million Liters',
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildWaterUsageByFarm(List<Map<String, dynamic>> farmCalculations) {
-    Map<String, double> waterByCrop = {};
-    for (var farm in farmCalculations) {
-      final cropType = farm['crop_type'] as String;
-      final waterUsage = farm['water_usage_liters'] as double? ?? 0.0;
-      waterByCrop[cropType] = (waterByCrop[cropType] ?? 0) + waterUsage;
-    }
-
-    final pieChartSections = waterByCrop.entries.map((entry) {
-      final color = _getCropColor(entry.key);
-      return PieChartSectionData(
-        color: color,
-        value: entry.value,
-        title: '${(entry.value / 1000000).toStringAsFixed(1)}M',
-        radius: 80,
-        titleStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      );
-    }).toList();
-
-    return Card(
-      color: Colors.white,
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Water Usage by Crop Type',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+            Text(
+              'Error: $errorMessage',
+              style: const TextStyle(color: Colors.red),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
-            SizedBox(
-              height: 250,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: PieChart(
-                      PieChartData(
-                        sections: pieChartSections,
-                        sectionsSpace: 2,
-                        centerSpaceRadius: 40,
-                        startDegreeOffset: -90,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: waterByCrop.entries.map((entry) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 16,
-                              height: 16,
-                              decoration: BoxDecoration(
-                                color: _getCropColor(entry.key),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              entry.key,
-                              style: const TextStyle(
-                                  fontSize: 14, color: Colors.black),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
               ),
+              onPressed: () => _fetchWaterUsageData(),
+              child: const Text('Retry'),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildWaterSavingsPotential(List<Map<String, dynamic>> conservationInsights) {
-    Map<String, double> savingsByCrop = {};
-    for (var insight in conservationInsights) {
-      final cropType = insight['crop_type'] as String;
-      final savings = insight['estimated_savings'] as double? ?? 0.0;
-      savingsByCrop[cropType] = (savingsByCrop[cropType] ?? 0) + savings;
+      );
     }
 
-    final barGroups = savingsByCrop.entries.map((entry) {
-      final index = savingsByCrop.keys.toList().indexOf(entry.key);
-      return BarChartGroupData(
-        x: index,
-        barRods: [
-          BarChartRodData(
-            toY: entry.value,
-            color: _getCropColor(entry.key),
-            width: 20,
-            borderRadius: BorderRadius.circular(4),
+    if (waterUsageData != null) {
+      return Container(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(245, 235, 234, 234),
+        ),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header
+              Text(
+                "Water Usage Dashboard",
+                style: GoogleFonts.barlow(
+                  fontSize: 32,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "Monitor water consumption and find ways to conserve",
+                style: GoogleFonts.barlow(
+                  fontSize: 16,
+                  color: Colors.black54,
+                ),
+              ),
+              const SizedBox(height: 25),
+
+              // Total water usage summary
+              _buildWaterUsageSummary(waterUsageData!.totalWaterUsageLiters),
+              const SizedBox(height: 25),
+
+              // Water usage by farm chart
+              _buildWaterUsageChart(waterUsageData!.farmData),
+              const SizedBox(height: 25),
+
+              // Conservation insights
+              _buildConservationInsights(waterUsageData!.conservationInsights),
+              const SizedBox(height: 25),
+
+              // Water conservation strategies
+              _buildConservationStrategies(
+                  waterUsageData!.waterConservationStrategies),
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return const Center(child: Text('No data available'));
+    }
+  }
+
+  Widget _buildWaterUsageSummary(double totalWaterUsage) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.blue.shade400, Colors.blue.shade600],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.blue.withOpacity(0.3),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: const Offset(0, 2),
           ),
         ],
-      );
-    }).toList();
-
-    return Card(
-      color: Colors.white,
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Potential Water Savings by Crop (Liters)',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              height: 250,
-              child: BarChart(
-                BarChartData(
-                  alignment: BarChartAlignment.spaceAround,
-                  maxY: savingsByCrop.values.fold(
-                          0.0, (prev, curr) => curr > prev ? curr : prev) *
-                      1.2,
-                  titlesData: FlTitlesData(
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 40,
-                        getTitlesWidget: (value, meta) {
-                          return Text(
-                            value.toInt().toString(),
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, meta) {
-                          final crops = savingsByCrop.keys.toList();
-                          if (value.toInt() >= 0 &&
-                              value.toInt() < crops.length) {
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Text(
-                                crops[value.toInt()],
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            );
-                          }
-                          return const Text('');
-                        },
-                      ),
-                    ),
-                    rightTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    topTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                  ),
-                  borderData: FlBorderData(
-                    show: true,
-                    border: const Border(
-                      left: BorderSide(
-                        color: Colors.black,
-                        width: 1,
-                      ),
-                      bottom: BorderSide(
-                        color: Colors.black,
-                        width: 1,
-                      ),
-                      right: BorderSide.none,
-                      top: BorderSide.none,
-                    ),
-                  ),
-                  gridData: const FlGridData(show: false),
-                  barGroups: barGroups,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.water_drop, color: Colors.white.withOpacity(0.9), size: 28),
+              const SizedBox(width: 10),
+              Text(
+                "Total Water Usage",
+                style: GoogleFonts.barlow(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
+            ],
+          ),
+          const SizedBox(height: 15),
+          Text(
+            "${(totalWaterUsage / 1000000).toStringAsFixed(2)} Million Liters",
+            style: GoogleFonts.barlow(
+              fontSize: 36,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            "Across all farms",
+            style: GoogleFonts.barlow(
+              fontSize: 16,
+              color: Colors.white.withOpacity(0.9),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildInsightsSection(List<Map<String, dynamic>> conservationInsights) {
-    return Card(
-      color: Colors.white,
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Conservation Insights',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              height: 300,
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 1.8,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
+  Widget _buildWaterUsageChart(List<FarmData> farmData) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 2,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.bar_chart, color: Colors.blue.shade700, size: 24),
+              const SizedBox(width: 8),
+              Text(
+                "Water Usage by Farm",
+                style: GoogleFonts.barlow(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
                 ),
-                itemCount: conservationInsights.length,
-                itemBuilder: (context, index) {
-                  final insight = conservationInsights[index];
-                  return _buildInsightCard(insight);
-                },
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 300,
+            child: _buildFarmWaterUsageChart(farmData),
+          ),
+          const SizedBox(height: 15),
+          Wrap(
+            spacing: 16,
+            runSpacing: 8,
+            children: [
+              _buildLegendItem('Wheat', Colors.blue.shade400),
+              _buildLegendItem('Corn', Colors.green.shade400),
+              _buildLegendItem('Soybean', Colors.amber.shade600),
+              _buildLegendItem('Rice', Colors.purple.shade400),
+              _buildLegendItem('Maize', Colors.orange.shade400),
+            ],
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildInsightCard(Map<String, dynamic> insight) {
-    final cropType = insight['crop_type'] as String;
-    final savings = insight['estimated_savings'] as double? ?? 0.0;
-    final insightText = insight['insights'] as String? ?? "No insights available";
+  Widget _buildLegendItem(String label, Color color) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 16,
+          height: 16,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        const SizedBox(width: 6),
+        Text(
+          label,
+          style: GoogleFonts.barlow(
+            fontSize: 14,
+            color: Colors.black87,
+          ),
+        ),
+      ],
+    );
+  }
 
-    return Card(
-      elevation: 2,
-      color: const Color.fromARGB(255, 214, 244, 244),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.eco, size: 20, color: _getCropColor(cropType)),
-                const SizedBox(width: 6),
-                Expanded(
+  Widget _buildFarmWaterUsageChart(List<FarmData> farmData) {
+    return BarChart(
+      BarChartData(
+        alignment: BarChartAlignment.spaceAround,
+        maxY: (farmData.map((e) => e.waterUsageLiters).reduce((a, b) => a > b ? a : b) * 1.1),
+        barTouchData: BarTouchData(
+          enabled: true,
+          touchTooltipData: BarTouchTooltipData(
+            tooltipBgColor: Colors.white,
+            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+              final farm = farmData[groupIndex];
+              return BarTooltipItem(
+                'Farm ${farm.farmId} (${farm.cropType})\n${(farm.waterUsageLiters / 1000).toStringAsFixed(1)}K liters',
+                GoogleFonts.barlow(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              );
+            },
+          ),
+        ),
+        titlesData: FlTitlesData(
+          show: true,
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              getTitlesWidget: (value, meta) {
+                if (value >= farmData.length || value < 0) return const Text('');
+                return SideTitleWidget(
+                  axisSide: meta.axisSide,
+                  space: 4,
                   child: Text(
-                    cropType,
-                    style: TextStyle(
+                    'Farm ${farmData[value.toInt()].farmId}',
+                    style: GoogleFonts.barlow(
+                      color: Colors.black87,
                       fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                      color: _getCropColor(cropType),
+                      fontSize: 12,
                     ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
                   ),
-                ),
-              ],
+                );
+              },
+              reservedSize: 30,
             ),
-            const SizedBox(height: 6),
-            Text(
-              '${savings.toStringAsFixed(0)} L',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Expanded(
-              child: Text(
-                insightText,
-                style: const TextStyle(
-                  fontSize: 11,
-                  color: Colors.black,
-                ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 3,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStrategiesSection(List<Map<String, dynamic>> strategies) {
-    return Card(
-      color: Colors.white,
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Water Conservation Strategies',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 16),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: strategies.length,
-              itemBuilder: (context, index) {
-                final strategy = strategies[index];
-                return _buildStrategyCard(strategy, index);
+          ),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 60,
+              interval: 1000000,
+              getTitlesWidget: (value, meta) {
+                return Text(
+                  '${(value / 1000000).toStringAsFixed(1)}M',
+                  style: GoogleFonts.barlow(
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                );
               },
             ),
-          ],
+          ),
+          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         ),
-      ),
-    );
-  }
-
-  Widget _buildStrategyCard(Map<String, dynamic> strategy, int index) {
-    final description = strategy['description'] as String? ?? "No description available";
-    final savingsPercentage = strategy['savings_percentage'] as String? ?? "N/A";
-    final source = strategy['source'] as String? ?? "Unknown source";
-
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      elevation: 2,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: index % 2 == 0 ? Colors.blue : Colors.green,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Icon(
-                      index % 2 == 0 ? Icons.water_drop : Icons.eco,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Strategy ${index + 1}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Potential Savings: $savingsPercentage',
-                        style: const TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+        borderData: FlBorderData(show: false),
+        gridData: FlGridData(
+          show: true,
+          horizontalInterval: 1000000,
+          drawVerticalLine: false,
+          getDrawingHorizontalLine: (value) {
+            return FlLine(
+              color: Colors.grey.withOpacity(0.2),
+              strokeWidth: 1,
+            );
+          },
+        ),
+        barGroups: List.generate(
+          farmData.length,
+          (index) {
+            final farm = farmData[index];
+            return BarChartGroupData(
+              x: index,
+              barRods: [
+                BarChartRodData(
+                  toY: farm.waterUsageLiters,
+                  color: _getCropColor(farm.cropType),
+                  width: 20,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(4),
+                    topRight: Radius.circular(4),
                   ),
                 ),
               ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              description,
-              style: const TextStyle(fontSize: 14, color: Colors.black),
-            ),
-            const SizedBox(height: 8),
-            const Divider(),
-            Text(
-              'Source: $source',
-              style: const TextStyle(
-                fontSize: 12,
-                fontStyle: FontStyle.italic,
-                color: Colors.grey,
-              ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
@@ -583,13 +377,347 @@ class _WaterUsageDashState extends State<WaterUsageDash> {
   Color _getCropColor(String cropType) {
     switch (cropType) {
       case 'Wheat':
-        return const Color.fromARGB(255, 233, 177, 7);
+        return Colors.blue.shade400;
       case 'Corn':
-        return Colors.yellow.shade800;
+        return Colors.green.shade400;
       case 'Soybean':
-        return Colors.green.shade700;
+        return Colors.amber.shade600;
+      case 'Rice':
+        return Colors.purple.shade400;
+      case 'Maize':
+        return Colors.orange.shade400;
       default:
-        return Colors.blue;
+        return Colors.grey;
     }
+  }
+
+  Widget _buildConservationInsights(List<ConservationInsight> insights) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.lightbulb_outline, color: Colors.amber.shade700, size: 24),
+            const SizedBox(width: 8),
+            Text(
+              "Conservation Insights",
+              style: GoogleFonts.barlow(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 15),
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            childAspectRatio: 1.2,
+            crossAxisSpacing: 15,
+            mainAxisSpacing: 15,
+          ),
+          itemCount: insights.length,
+          itemBuilder: (context, index) {
+            final insight = insights[index];
+            return _buildInsightCard(insight);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInsightCard(ConservationInsight insight) {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 2,
+            offset: const Offset(0, 1),
+          ),
+        ],
+        border: Border.all(color: _getCropColor(insight.cropType).withOpacity(0.3), width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 16,
+                backgroundColor: _getCropColor(insight.cropType).withOpacity(0.2),
+                child: Text(
+                  insight.cropType[0],
+                  style: TextStyle(
+                    color: _getCropColor(insight.cropType),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  insight.cropType,
+                  style: GoogleFonts.barlow(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Icon(Icons.water_drop, 
+                  color: Colors.blue.shade700, 
+                  size: 16),
+              const SizedBox(width: 4),
+              Text(
+                "${(insight.estimatedSavingsLiters / 1000).toStringAsFixed(1)}K liters potential savings",
+                style: GoogleFonts.barlow(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue.shade700,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: insight.insights.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.eco, color: Colors.green.shade600, size: 14),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          insight.insights[index],
+                          style: GoogleFonts.barlow(
+                            fontSize: 12,
+                            color: Colors.black87,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildConservationStrategies(
+      List<WaterConservationStrategy> strategies) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.policy, color: Colors.indigo.shade600, size: 24),
+            const SizedBox(width: 8),
+            Text(
+              "Water Conservation Strategies",
+              style: GoogleFonts.barlow(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 15),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: strategies.length,
+          itemBuilder: (context, index) {
+            final strategy = strategies[index];
+            return Container(
+              margin: const EdgeInsets.only(bottom: 15),
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 1,
+                    blurRadius: 2,
+                    offset: const Offset(0, 1),
+                  ),
+                ],
+                border: Border.all(
+                  color: Colors.indigo.shade200,
+                  width: 1,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          strategy.description,
+                          style: GoogleFonts.barlow(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.indigo.shade100,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          "Saves ${strategy.savingsPercentage}",
+                          style: GoogleFonts.barlow(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.indigo.shade700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "Source: ${strategy.source}",
+                    style: GoogleFonts.barlow(
+                      fontSize: 13,
+                      fontStyle: FontStyle.italic,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+// Data model classes
+class WaterUsageData {
+  final List<ConservationInsight> conservationInsights;
+  final List<FarmData> farmData;
+  final double totalWaterUsageLiters;
+  final List<WaterConservationStrategy> waterConservationStrategies;
+
+  WaterUsageData({
+    required this.conservationInsights,
+    required this.farmData,
+    required this.totalWaterUsageLiters,
+    required this.waterConservationStrategies,
+  });
+
+  factory WaterUsageData.fromJson(Map<String, dynamic> json) {
+    return WaterUsageData(
+      conservationInsights: (json['conservation_insights'] as List)
+          .map((item) => ConservationInsight.fromJson(item))
+          .toList(),
+      farmData: (json['farm_data'] as List)
+          .map((item) => FarmData.fromJson(item))
+          .toList(),
+      totalWaterUsageLiters: json['total_water_usage_liters'],
+      waterConservationStrategies: (json['water_conservation_strategies'] as List)
+          .map((item) => WaterConservationStrategy.fromJson(item))
+          .toList(),
+    );
+  }
+}
+
+class ConservationInsight {
+  final String cropType;
+  final double estimatedSavingsLiters;
+  final List<String> insights;
+
+  ConservationInsight({
+    required this.cropType,
+    required this.estimatedSavingsLiters,
+    required this.insights,
+  });
+
+  factory ConservationInsight.fromJson(Map<String, dynamic> json) {
+    return ConservationInsight(
+      cropType: json['crop_type'],
+      estimatedSavingsLiters: json['estimated_savings_liters'],
+      insights: List<String>.from(json['insights']),
+    );
+  }
+}
+
+class FarmData {
+  final String cropType;
+  final int farmId;
+  final double rainfallMm;
+  final double soilMoisture;
+  final double waterUsageLiters;
+
+  FarmData({
+    required this.cropType,
+    required this.farmId,
+    required this.rainfallMm,
+    required this.soilMoisture,
+    required this.waterUsageLiters,
+  });
+
+  factory FarmData.fromJson(Map<String, dynamic> json) {
+    return FarmData(
+      cropType: json['crop_type'],
+      farmId: json['farm_id'],
+      rainfallMm: json['rainfall_mm'],
+      soilMoisture: json['soil_moisture'],
+      waterUsageLiters: json['water_usage_liters'],
+    );
+  }
+}
+
+class WaterConservationStrategy {
+  final String description;
+  final String savingsPercentage;
+  final String source;
+
+  WaterConservationStrategy({
+    required this.description,
+    required this.savingsPercentage,
+    required this.source,
+  });
+
+  factory WaterConservationStrategy.fromJson(Map<String, dynamic> json) {
+    return WaterConservationStrategy(
+      description: json['description'],
+      savingsPercentage: json['savings_percentage'],
+      source: json['source'],
+    );
   }
 }

@@ -18,13 +18,11 @@ class WeatherData {
 
   factory WeatherData.fromJson(Map<String, dynamic> json) {
     return WeatherData(
-      cropRecommendation: CropRecommendation.fromJson(json['crop_recommendation']),
-      queryData: json['query_data'] != null
-          ? (json['query_data'] as List)
-              .map((item) => CropQueryData.fromJson(item))
-              .toList()
-          : [],  // Default to empty list if null
-      weatherCondition: WeatherCondition.fromJson(json['weather_condition']),
+      cropRecommendation: CropRecommendation.fromJson(json['crop_recommendation'] ?? {}),
+      queryData: (json['query_data'] as List<dynamic>? ?? [])
+          .map((item) => CropQueryData.fromJson(item))
+          .toList(),
+      weatherCondition: WeatherCondition.fromJson(json['weather_condition'] ?? {}),
     );
   }
 }
@@ -43,9 +41,9 @@ class CropRecommendation {
 
   factory CropRecommendation.fromJson(Map<String, dynamic> json) {
     return CropRecommendation(
-      harvestCrops: List<String>.from(json['harvest_crops']),
-      plantationCrops: List<String>.from(json['plantation_crops']),
-      reason: json['reason'],
+      harvestCrops: List<String>.from(json['harvestation_crops'] ?? []),
+      plantationCrops: List<String>.from(json['plantation_crops'] ?? []),
+      reason: json['reason'] ?? '',
     );
   }
 }
@@ -64,27 +62,27 @@ class CropQueryData {
 
   factory CropQueryData.fromJson(Map<String, dynamic> json) {
     return CropQueryData(
-      crop: json['crop'],
-      value1: json['value1'].toDouble(),
-      value2: json['value2'].toDouble(),
+      crop: json['crop'] ?? '',
+      value1: (json['value1'] ?? 0).toDouble(),
+      value2: (json['value2'] ?? 0).toDouble(),
     );
   }
 }
 
 // WeatherCondition class
 class WeatherCondition {
-  final String description;
+  final String condition;
   final String explanation;
 
   WeatherCondition({
-    required this.description,
+    required this.condition,
     required this.explanation,
   });
 
   factory WeatherCondition.fromJson(Map<String, dynamic> json) {
     return WeatherCondition(
-      description: json['description'],
-      explanation: json['explanation'],
+      condition: json['description'] ?? '',
+      explanation: json['explanation'] ?? '',
     );
   }
 }
@@ -114,7 +112,7 @@ class _RightDashboardState extends State<RightDashboard> {
     });
 
     try {
-      final url = Uri.parse('http://192.168.0.207:5000/weather');
+      final url = Uri.parse('http://192.168.0.101:5000/weather');
       final response = await http.get(url).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
@@ -266,7 +264,7 @@ class _RightDashboardState extends State<RightDashboard> {
               Icon(Icons.wb_sunny, color: Colors.orange.shade800, size: 32),
               const SizedBox(width: 10),
               Text(
-                weather.description,
+                weather.condition,
                 style: GoogleFonts.barlow(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,

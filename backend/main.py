@@ -19,7 +19,7 @@ decision_agent = DecisionAgent(db_path)
 def weather():
     location = request.args.get('location', 'Kolkata')
     result = w_agent("Kolkata")
-    cleaned_result = decision_agent.analyze_and_clean(result)
+    cleaned_result = decision_agent.analyze_and_clean(result,"weather")
     if "error" in cleaned_result:
         print(f"Error in DecisionAgent: {cleaned_result['raw_response']}")
         return jsonify({"status": "error", "message": cleaned_result["error"], "details": cleaned_result["raw_response"]}), 500
@@ -29,26 +29,26 @@ def weather():
 def sustainability():
     crop_type = request.args.get('crop_type', 'Wheat')
     result = farm_advisor(crop_type)
-    cleaned_result = decision_agent.analyze_and_clean(result)
+    cleaned_result = decision_agent.analyze_and_clean(result,"sustainability")
     return jsonify(cleaned_result)
 
 @app.route('/market-trends', methods=['GET'])
 def market_trends():
     crop_type = request.args.get('crop_type', 'Wheat')
     result = market_trend_analyzer(crop_type)
-    cleaned_result = decision_agent.analyze_and_clean(result)
+    cleaned_result = decision_agent.analyze_and_clean(result,"market")
     return jsonify(cleaned_result)
 
 @app.route('/carbon-footprint', methods=['GET'])
 def carbon_footprint():
     result = carbon_footprint_analyzer()
-    cleaned_result = decision_agent.analyze_and_clean(result)
+    cleaned_result = decision_agent.analyze_and_clean(result,"carbon")
     return jsonify(cleaned_result)
 
 @app.route('/water-usage', methods=['GET'])
 def water_usage():
     result = water_usage_tracker_agent()
-    cleaned_result = decision_agent.analyze_and_clean(result)
+    cleaned_result = decision_agent.analyze_and_clean(result,"water")
     return jsonify(cleaned_result)
 
 if __name__ == "__main__":

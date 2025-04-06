@@ -30,8 +30,8 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
 
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.0.207:5000/market-trend'))
-          .timeout(const Duration(seconds: 10));
+          .get(Uri.parse('http://192.168.0.101:5000/market-trends'))
+          .timeout(const Duration(seconds: 10000));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = json.decode(response.body);
@@ -138,7 +138,7 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
     // Calculate overall trend based on number of rising trends
     final totalParameters = analysis.parameterAnalysis.length;
     final risingParameters = analysis.parameterAnalysis.values
-        .where((data) => data.analysis == 'True')
+        .where((data) => data == 'True')
         .length;
     final isOverallRising = risingParameters > (totalParameters / 2);
 
@@ -247,64 +247,65 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3, // Increased to 3 columns
-        childAspectRatio:
-            1.8, // Adjusted for more compact cards (wider than tall)
-        crossAxisSpacing: 10, // Reduced spacing
-        mainAxisSpacing: 10, // Reduced spacing
+        crossAxisCount: 4, // Changed from 3 to 4 for smaller cards
+        childAspectRatio: 1.5, // Adjusted for smaller cards
+        crossAxisSpacing: 8, // Reduced spacing
+        mainAxisSpacing: 8, // Reduced spacing
       ),
       itemCount: analysis.parameterAnalysis.length,
       itemBuilder: (context, index) {
         final paramName = analysis.parameterAnalysis.keys.elementAt(index);
-        final paramData = analysis.parameterAnalysis[paramName]!;
-        final isTrending = paramData.analysis == 'True';
+        final paramValue = analysis.parameterAnalysis[paramName]!;
+        final isTrending = paramValue == 'True';
 
         return Container(
-          padding: const EdgeInsets.all(10), // Reduced padding from 15 to 10
+          padding: const EdgeInsets.all(8), // Reduced padding
           decoration: BoxDecoration(
-            color: isTrending ? Colors.blue.shade50 : Colors.red.shade50,
-            borderRadius: BorderRadius.circular(8), // Slightly smaller radius
+            color: isTrending ? Colors.green.shade50 : Colors.red.shade50,
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: isTrending ? Colors.blue.shade200 : Colors.red.shade200,
+              color: isTrending ? Colors.green.shade300 : Colors.red.shade300,
               width: 1,
             ),
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Row(
-                children: [
-                  Icon(
-                    isTrending ? Icons.trending_up : Icons.trending_down,
-                    color:
-                        isTrending ? Colors.blue.shade700 : Colors.red.shade700,
-                    size: 16, // Reduced icon size from 20 to 16
-                  ),
-                  const SizedBox(width: 6), // Reduced spacing from 8 to 6
-                  Expanded(
-                    child: Text(
-                      paramName.replaceAll('_', ' '),
-                      style: GoogleFonts.barlow(
-                        fontSize: 12, // Reduced from 14 to 12
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4), // Reduced from 8 to 4
-              Expanded(
-                child: Text(
-                  paramData.description,
-                  style: GoogleFonts.barlow(
-                    fontSize: 10, // Reduced from 12 to 10
-                    color: Colors.black87,
-                  ),
-                  maxLines: 3, // Reduced from 4 to 3
-                  overflow: TextOverflow.ellipsis,
+              // Status indicator
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: isTrending ? Colors.green : Colors.red,
+                  borderRadius: BorderRadius.circular(12),
                 ),
+                child: Text(
+                  isTrending ? 'TRUE' : 'FALSE',
+                  style: GoogleFonts.barlow(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 10,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 4),
+              // Parameter name
+              Text(
+                _getShortName(paramName),
+                textAlign: TextAlign.center,
+                style: GoogleFonts.barlow(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 2),
+              // Icon
+              Icon(
+                isTrending ? Icons.trending_up : Icons.trending_down,
+                color: isTrending ? Colors.green.shade700 : Colors.red.shade700,
+                size: 14,
               ),
             ],
           ),
@@ -313,13 +314,26 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
     );
   }
 
+  // Helper method to make parameter names shorter for small cards
+  String _getShortName(String paramName) {
+    final words = paramName.split('_');
+    if (words.length <= 2) return paramName.replaceAll('_', ' ');
+
+    // For longer names, use first letters of each word except the last word
+    final result = words.sublist(0, words.length - 1)
+        .map((word) => word[0])
+        .join('')
+        .toUpperCase();
+    return '$result ${words.last}';
+  }
+
   Widget _buildTrendBarChart(MarketAnalysis analysis) {
     // Count rising vs non-rising trends
     int risingCount = 0;
     int nonRisingCount = 0;
 
-    analysis.parameterAnalysis.values.forEach((param) {
-      if (param.analysis == 'True') {
+    analysis.parameterAnalysis.values.forEach((value) {
+      if (value == 'True') {
         risingCount++;
       } else {
         nonRisingCount++;
@@ -440,9 +454,6 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
   }
 
   Widget _buildTopCropsComparisonSection(Top3MarketComparison comparison) {
-    // Assuming Wheat is the base crop for comparison but it's not in the provided JSON
-    const String baseCrop = 'Wheat';
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -950,17 +961,6 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
       ],
     );
   }
-
-  // Keep the original method for reference but it won't be used
-  Widget _buildWebTrendCard(
-      String cropName, Map<String, dynamic> cropData, Color color) {
-    return Container();
-  }
-
-  Widget _buildWebTrendMetricCard(
-      String label, String value, IconData icon, Color color) {
-    return Container();
-  }
 }
 
 // Data Models for JSON structure
@@ -977,41 +977,26 @@ class MarketTrendData {
 
   factory MarketTrendData.fromJson(Map<String, dynamic> json) {
     return MarketTrendData(
-      marketAnalysis: MarketAnalysis.fromJson(json['market_analysis']),
+      marketAnalysis: MarketAnalysis.fromJson(json['market_analysis'] ?? {}),
       top3MarketComparison:
-          Top3MarketComparison.fromJson(json['top3_market_comparison']),
-      webMarketTrends: WebMarketTrends.fromJson(json['web_market_trends']),
+          Top3MarketComparison.fromJson(json['top3_market_comparison'] ?? {}),
+      webMarketTrends: WebMarketTrends.fromJson(json['web_market_trends'] ?? {}),
     );
   }
 }
 
-class ParameterData {
-  final String analysis;
-  final String description;
-
-  ParameterData({
-    required this.analysis,
-    required this.description,
-  });
-}
-
 class MarketAnalysis {
-  final Map<String, ParameterData> parameterAnalysis;
+  final Map<String, String> parameterAnalysis;
 
   MarketAnalysis({
     required this.parameterAnalysis,
   });
 
   factory MarketAnalysis.fromJson(Map<String, dynamic> json) {
-    final Map<String, ParameterData> paramAnalysis = {};
+    final Map<String, String> paramAnalysis = {};
 
     json.forEach((key, value) {
-      if (value is Map<String, dynamic>) {
-        paramAnalysis[key] = ParameterData(
-          analysis: value['analysis'] as String,
-          description: value['description'] as String,
-        );
-      }
+      paramAnalysis[key] = value.toString();
     });
 
     return MarketAnalysis(
@@ -1031,14 +1016,17 @@ class Top3MarketComparison {
 
   factory Top3MarketComparison.fromJson(Map<String, dynamic> json) {
     Map<String, Map<String, dynamic>> cropsMap = {};
-    if (json['crops'] != null) {
-      (json['crops'] as Map<String, dynamic>).forEach((key, value) {
-        cropsMap[key] = Map<String, dynamic>.from(value);
+
+    if (json['parameters_comparison'] != null) {
+      (json['parameters_comparison'] as Map<String, dynamic>).forEach((key, value) {
+        if (value is Map<String, dynamic>) {
+          cropsMap[key] = value;
+        }
       });
     }
 
     return Top3MarketComparison(
-      insights: json['insights'] as String,
+      insights: json['insights'] ?? 'No insights available',
       crops: cropsMap,
     );
   }
@@ -1053,9 +1041,12 @@ class WebMarketTrends {
 
   factory WebMarketTrends.fromJson(Map<String, dynamic> json) {
     Map<String, Map<String, dynamic>> cropsMap = {};
+
     if (json['crops'] != null) {
       (json['crops'] as Map<String, dynamic>).forEach((key, value) {
-        cropsMap[key] = Map<String, dynamic>.from(value);
+        if (value is Map<String, dynamic>) {
+          cropsMap[key] = value;
+        }
       });
     }
 
