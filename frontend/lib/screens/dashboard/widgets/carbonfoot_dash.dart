@@ -27,8 +27,8 @@ Future<void> _fetchData() async {
       Uri.parse('https://22bb-45-112-68-8.ngrok-free.app/carbon-footprint'),
       headers: {
         'Accept': 'application/json',
-        'User-Agent': 'PostmanRuntime/7.36.0', // Mimic Postman’s User-Agent
-        'ngrok-skip-browser-warning': 'true', // Skip ngrok’s warning page
+        'User-Agent': 'PostmanRuntime/7.36.0', 
+        'ngrok-skip-browser-warning': 'true', 
       },
     );
     print('Response status: ${response.statusCode}');

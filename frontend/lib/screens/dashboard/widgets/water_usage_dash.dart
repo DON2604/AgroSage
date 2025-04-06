@@ -32,8 +32,8 @@ class _WaterUsageDashboardState extends State<WaterUsageDashboard> {
       final response = await http
           .get(Uri.parse('https://22bb-45-112-68-8.ngrok-free.app/water-usage'),headers: {
         'Accept': 'application/json',
-        'User-Agent': 'PostmanRuntime/7.36.0', // Mimic Postman’s User-Agent
-        'ngrok-skip-browser-warning': 'true', // Skip ngrok’s warning page
+        'User-Agent': 'PostmanRuntime/7.36.0', 
+        'ngrok-skip-browser-warning': 'true',
       },)
           .timeout(const Duration(seconds: 15));
 
