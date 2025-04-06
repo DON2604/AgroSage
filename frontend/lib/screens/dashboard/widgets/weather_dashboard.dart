@@ -112,8 +112,12 @@ class _RightDashboardState extends State<RightDashboard> {
     });
 
     try {
-      final url = Uri.parse('http://192.168.0.101:5000/weather');
-      final response = await http.get(url).timeout(const Duration(seconds: 10));
+      final url = Uri.parse('https://22bb-45-112-68-8.ngrok-free.app/weather');
+      final response = await http.get(url,headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'PostmanRuntime/7.36.0', // Mimic Postman’s User-Agent
+        'ngrok-skip-browser-warning': 'true', // Skip ngrok’s warning page
+      },).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = json.decode(response.body);

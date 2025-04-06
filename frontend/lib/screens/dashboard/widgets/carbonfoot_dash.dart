@@ -21,28 +21,37 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
     _fetchData();
   }
 
-  Future<void> _fetchData() async {
-    try {
-      final response = await http.get(Uri.parse('http://192.168.0.101:5000/carbon-footprint'));
-      
-      if (response.statusCode == 200) {
-        setState(() {
-          _data = json.decode(response.body);
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _error = 'Failed to load data: ${response.statusCode}';
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
+Future<void> _fetchData() async {
+  try {
+    final response = await http.get(
+      Uri.parse('https://22bb-45-112-68-8.ngrok-free.app/carbon-footprint'),
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'PostmanRuntime/7.36.0', // Mimic Postman’s User-Agent
+        'ngrok-skip-browser-warning': 'true', // Skip ngrok’s warning page
+      },
+    );
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.statusCode == 200) {
       setState(() {
-        _error = 'Error: $e';
+        _data = json.decode(response.body);
+        _isLoading = false;
+      });
+    } else {
+      setState(() {
+        _error = 'Failed to load data: ${response.statusCode}';
         _isLoading = false;
       });
     }
+  } catch (e) {
+    setState(() {
+      _error = 'Error: $e';
+      _isLoading = false;
+    });
   }
+}
 
   @override
   Widget build(BuildContext context) {

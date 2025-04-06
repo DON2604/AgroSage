@@ -18,7 +18,7 @@ class GreetingWeather extends StatelessWidget {
                 style: TextStyle(fontSize: 25, color: Colors.white),
               ),
               const Text(
-                "16.0°C",
+                "33.0°C",
                 style: TextStyle(
                     fontSize: 75, color: Colors.white, letterSpacing: -2),
               ),

@@ -9,9 +9,8 @@ from agents.decision_agent import DecisionAgent
 import os
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app) 
 
-# Initialize DecisionAgent
 db_path = os.path.join(os.path.dirname(__file__), 'db', 'memory.db')
 decision_agent = DecisionAgent(db_path)
 
