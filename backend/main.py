@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS  # Import CORS
+from flask_cors import CORS
 from agents.sustainability_agent import farm_advisor
 from agents.weather_agent import w_agent
 from agents.market_trend_agent import market_trend_analyzer
@@ -14,6 +14,10 @@ CORS(app)
 
 db_path = os.path.join(os.path.dirname(__file__), 'db', 'memory.db')
 decision_agent = DecisionAgent(db_path)
+
+@app.route('/', methods=['GET'])
+def health_check():
+    return jsonify({"status": "alive", "message": "Service is running"}), 200
 
 @app.route('/weather', methods=['GET'])
 def weather():
@@ -51,7 +55,6 @@ def water_usage():
     cleaned_result = decision_agent.analyze_and_clean(result,"water")
     return jsonify(cleaned_result)
 
-# Authentication routes
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
