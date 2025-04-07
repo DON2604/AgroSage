@@ -40421,11 +40421,11 @@ r=A.bC(16)
 s=A.b([new A.bH(5,B.a7,A.Y(B.c.am(25.5),B.o.n()>>>16&255,B.o.n()>>>8&255,B.o.n()&255),B.hK,7)],t.V)
 m=A.bC(12)
 l=t.p
-return new A.bn(B.jx,A.uo(A.bb(A.b([A.bc(j,A.bb(A.b([B.Vf,B.l_,A.bo(A.b([A.de(A.bc(j,A.bb(A.b([B.Vm,B.cB,A.a2(B.c.a2(p,2)+" kg CO\u2082e",j,j,j,B.UL,j,j)],l),B.C,B.n,B.m),B.q,j,j,new A.b4(B.D1,j,j,m,j,j,B.E),j,j,j,j,B.aV,j,j,j),1)],l),B.x,B.n,B.m)],l),B.C,B.n,B.m),B.q,j,j,new A.b4(B.h,j,j,r,s,j,B.E),j,j,j,j,B.aV,j,j,j),B.l0,k.a3q(q),B.l0,k.a3M(o),B.l0,k.a3z(n)],l),B.C,B.n,B.m),j),j)},
+return new A.bn(B.jx,A.uo(A.bb(A.b([A.bc(j,A.bb(A.b([B.Vf,B.l_,A.bo(A.b([A.de(A.bc(j,A.bb(A.b([B.Vl,B.cB,A.a2(B.c.a2(p,2)+" kg CO\u2082e",j,j,j,B.UL,j,j)],l),B.C,B.n,B.m),B.q,j,j,new A.b4(B.D1,j,j,m,j,j,B.E),j,j,j,j,B.aV,j,j,j),1)],l),B.x,B.n,B.m)],l),B.C,B.n,B.m),B.q,j,j,new A.b4(B.h,j,j,r,s,j,B.E),j,j,j,j,B.aV,j,j,j),B.l0,k.a3q(q),B.l0,k.a3M(o),B.l0,k.a3z(n)],l),B.C,B.n,B.m),j),j)},
 a3q(a){var s,r,q,p=this,o=null,n=A.bC(16),m=A.b([new A.bH(5,B.a7,A.Y(B.c.am(25.5),B.o.n()>>>16&255,B.o.n()>>>8&255,B.o.n()&255),B.hK,7)],t.V),l=J.cu(a),k=J.axB(l.ha(a,new A.ajo(),t.z).le(0,new A.ajp()),1.2),j=A.ol(o,o,o,o,o,o,o,A.x0(new A.ajq(),new A.ajr(a))),i=A.jw(o,!1),h=l.gD(a),g=J.kM(h,t.DK)
 for(s=t.UA,r=0;r<h;++r){q=J.cY(l.h(a,r),"carbon_footprint")
 g[r]=A.lY(A.b([A.ok(o,o,B.AX,o,p.a46(J.cY(l.h(a,r),"crop_type")),o,o,o,q,22)],s),o,o,o,r)}l=t.p
-return A.bc(o,A.bb(A.b([B.Vp,B.as,A.dj(A.wZ(A.oi(B.dp,o,g,j,o,i,o,o,o,k,o,o,new A.hG(!0,new A.c2(16,o,new A.c6(!0,new A.ajs(),40,o),!0),new A.c2(16,o,new A.c6(!1,A.fn(),22,o),!0),new A.c2(16,o,new A.c6(!1,A.fn(),22,o),!0),new A.c2(16,o,new A.c6(!0,new A.ajt(a),30,o),!0)))),300,o),B.f9,A.ahH(A.b([p.Ck("Wheat",B.mJ),p.Ck("Corn",B.mu),p.Ck("Soybean",B.j1)],l),8,12)],l),B.C,B.n,B.m),B.q,o,o,new A.b4(B.h,o,o,n,m,o,B.E),o,o,o,o,B.aV,o,o,o)},
+return A.bc(o,A.bb(A.b([B.Vo,B.as,A.dj(A.wZ(A.oi(B.dp,o,g,j,o,i,o,o,o,k,o,o,new A.hG(!0,new A.c2(16,o,new A.c6(!0,new A.ajs(),40,o),!0),new A.c2(16,o,new A.c6(!1,A.fn(),22,o),!0),new A.c2(16,o,new A.c6(!1,A.fn(),22,o),!0),new A.c2(16,o,new A.c6(!0,new A.ajt(a),30,o),!0)))),300,o),B.f9,A.ahH(A.b([p.Ck("Wheat",B.mJ),p.Ck("Corn",B.mu),p.Ck("Soybean",B.j1)],l),8,12)],l),B.C,B.n,B.m),B.q,o,o,new A.b4(B.h,o,o,n,m,o,B.E),o,o,o,o,B.aV,o,o,o)},
 Ck(a,b){var s=null
 return A.bo(A.b([A.bc(s,s,B.q,s,s,new A.b4(b,s,s,A.bC(4),s,s,B.E),s,16,s,s,s,s,s,16),B.aD,A.a2(a,s,s,s,s,s,s)],t.p),B.x,B.n,B.dK)},
 a46(a){switch(a){case"Wheat":return B.mJ
@@ -40479,7 +40479,7 @@ s=J.cb(l.a(m.h(n,p)))
 r=J.kM(s,t.l7)
 for(q=0;q<s;++q)r[q]=new A.bn(B.Ff,A.bo(A.b([B.Gq,B.aD,new A.t5(1,B.hd,A.a2(J.cY(l.a(m.h(n,p)),q),o,o,o,o,o,o),o)],d),B.C,B.n,B.m),o)
 B.b.R(g,r)
-B.b.R(e,g)}else B.b.R(e,A.b([B.cB,B.Vq],d))
+B.b.R(e,g)}else B.b.R(e,A.b([B.cB,B.Vp],d))
 return A.bc(o,A.bb(e,B.C,B.n,B.m),B.q,o,o,new A.b4(j,o,h,i,o,o,B.E),o,o,o,B.nw,B.jx,o,o,o)},
 $S:77}
 A.aju.prototype={
@@ -40503,8 +40503,8 @@ s=1
 break
 case 1:return A.N(q,r)}})
 return A.O($async$wz,r)},
-L(a){var s=null,r=t.p,q=A.bb(A.b([new A.td(this.wz(),new A.a4k(),s,t.jz),B.Vl,B.X6],r),B.C,B.n,B.m),p=A.dj(s,s,50),o=new A.fr(Date.now(),0,!1)
-return new A.bn(B.Fr,A.bo(A.b([q,p,A.bb(A.b([B.Vw,A.a2(""+A.aAD(o)+"/"+A.aAE(o)+"/"+A.aAF(o),s,s,s,B.RK,s,s)],r),B.x,B.n,B.m)],r),B.x,B.n,B.m),s)}}
+L(a){var s=null,r=t.p,q=A.bb(A.b([new A.td(this.wz(),new A.a4k(),s,t.jz),B.Vw,B.X6],r),B.C,B.n,B.m),p=A.dj(s,s,50),o=new A.fr(Date.now(),0,!1)
+return new A.bn(B.Fr,A.bo(A.b([q,p,A.bb(A.b([B.Vv,A.a2(""+A.aAD(o)+"/"+A.aAE(o)+"/"+A.aAF(o),s,s,s,B.RK,s,s)],r),B.x,B.n,B.m)],r),B.x,B.n,B.m),s)}}
 A.a4k.prototype={
 $2(a,b){var s=null,r=b.b
 if(r==null)r=""
@@ -41343,21 +41343,21 @@ return A.O($async$zh,r)},
 aq9(){this.a6(new A.amY(this))},
 L(a){var s,r,q,p,o=this,n=null
 if(o.w){s=t.p
-r=A.b([A.bo(B.oG,B.x,B.n,B.m),B.zI,B.Vg,B.aX,B.Vu,B.l1,A.Ok(o.f,B.GN,!1,B.fg),B.as,A.Ok(o.d,B.ov,!1,B.fg),B.as,A.Ok(o.e,B.ou,!0,B.fg),B.as],s)
+r=A.b([A.bo(B.oG,B.x,B.n,B.m),B.zI,B.Vg,B.aX,B.Vt,B.l1,A.Ok(o.f,B.GN,!1,B.fg),B.as,A.Ok(o.d,B.ov,!1,B.fg),B.as,A.Ok(o.e,B.ou,!0,B.fg),B.as],s)
 q=o.y
 if(q!=null)r.push(new A.bn(B.nv,A.a2(q,n,n,n,B.dd,n,n),n))
 q=o.x?n:o.gadH()
 p=A.Jz(n,n,B.az,n,n,n,n,n,n,n,n,n,B.nD,n,n,n,n,n,n)
-r.push(A.bo(A.b([A.yd(o.x?B.zJ:B.Vh,q,p),B.zG,A.aAn(B.Vv,o.gX1(),A.aAo(n,n,n,n,n,n,n,n,n,B.az,n,n,B.nC,n,n,B.iL,n,n,n,n))],s),B.x,B.n,B.m))
+r.push(A.bo(A.b([A.yd(o.x?B.zJ:B.Vh,q,p),B.zG,A.aAn(B.Vu,o.gX1(),A.aAo(n,n,n,n,n,n,n,n,n,B.az,n,n,B.nC,n,n,B.iL,n,n,n,n))],s),B.x,B.n,B.m))
 s=A.bb(r,B.C,B.n,B.m)}else s=o.a3B()
 return A.aB4(B.h,A.bo(A.b([A.de(new A.bn(B.Fu,A.eg(A.uo(s,n),n,n),n),5),A.de(A.bc(n,A.azw("assets/bg.jpg",B.iN,1/0),B.q,B.h,n,n,n,n,n,n,n,n,n,n),5)],t.p),B.x,B.n,B.m),!1)},
-a3B(){var s,r=this,q=null,p=t.p,o=A.b([B.NF,B.zI,B.Vi,B.aX,B.Vn,B.l1,A.Ok(r.d,B.ov,!1,B.fg),B.as,A.Ok(r.e,B.ou,!0,B.fg),A.bo(A.b([new A.xn(r.r,new A.amK(r),B.az,q),B.Vk,B.l4,A.avQ(B.Vr,new A.amL(),q)],p),B.x,B.n,B.m),B.aX],p),n=r.y
+a3B(){var s,r=this,q=null,p=t.p,o=A.b([B.NF,B.zI,B.Vi,B.aX,B.Vm,B.l1,A.Ok(r.d,B.ov,!1,B.fg),B.as,A.Ok(r.e,B.ou,!0,B.fg),A.bo(A.b([new A.xn(r.r,new A.amK(r),B.az,q),B.Vk,B.l4,A.avQ(B.Vq,new A.amL(),q)],p),B.x,B.n,B.m),B.aX],p),n=r.y
 if(n!=null)o.push(new A.bn(B.nv,A.a2(n,q,q,q,B.dd,q,q),q))
 n=r.x?q:r.galw()
 s=A.Jz(q,q,B.az,q,q,q,q,q,q,q,q,q,B.nD,q,q,q,q,q,q)
 o.push(A.bo(A.b([A.yd(r.x?B.zJ:B.Vd,n,s),B.zG,A.aAn(B.Ve,r.gX1(),A.aAo(q,q,q,q,q,q,q,q,q,B.az,q,q,B.nC,q,q,B.iL,q,q,q,q))],p),B.x,B.n,B.m))
 o.push(B.l1)
-o.push(B.Vo)
+o.push(B.Vn)
 return A.bb(o,B.C,B.n,B.m)}}
 A.amX.prototype={
 $0(){this.a.r=this.b},
@@ -89826,8 +89826,8 @@ B.Cp=new A.xj(null,null,null,null,null,null,null)
 B.mp=new A.m0(1,"manual")
 B.mq=new A.m0(2,"controller")
 B.YF=new A.a_J(0,"scale")
-B.Vt=new A.cg("No data available",null,null,null,null,null,null,null,null)
-B.eg=new A.iv(B.U,null,null,B.Vt,null)
+B.Vs=new A.cg("No data available",null,null,null,null,null,null,null,null)
+B.eg=new A.iv(B.U,null,null,B.Vs,null)
 B.YZ=new A.ahO(0,"material")
 B.AH=new A.rf(B.az,t.ZU)
 B.Cv=new A.m1(null,null,B.AH,null)
@@ -90569,8 +90569,8 @@ B.Gb=new A.cy(58259,!1)
 B.Gs=new A.hJ(B.Gb,null,B.az,null,null)
 B.aD=new A.c9(8,null,null,null)
 B.R2=new A.m(!0,B.az,null,null,null,null,24,B.p,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Vs=new A.cg("AgroSage",null,B.R2,null,null,null,null,null,null)
-B.oG=A.b(s([B.Gs,B.aD,B.Vs]),t.p)
+B.Vr=new A.cg("AgroSage",null,B.R2,null,null,null,null,null,null)
+B.oG=A.b(s([B.Gs,B.aD,B.Vr]),t.p)
 B.an=new A.Cc(0,"upstream")
 B.Ih=A.b(s([B.an,B.k]),A.am("B<Cc>"))
 B.aS=new A.Cg(0,"rtl")
@@ -92346,25 +92346,25 @@ B.Vi=new A.cg("Welcome Back!",null,B.A7,null,null,null,null,null,null)
 B.lb=new A.m(!0,B.mC,null,null,null,null,20,B.p,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.Vj=new A.cg("Global Reduction Strategies",null,B.lb,null,null,null,null,null,null)
 B.Vk=new A.cg("Remember me",null,null,null,null,null,null,null,null)
-B.RU=new A.m(!0,B.h,null,null,null,null,75,null,null,-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Vl=new A.cg("33.0\xb0C",null,B.RU,null,null,null,null,null,null)
 B.CS=new A.n(1,0.2,0.2549019607843137,0.3333333333333333,B.e)
 B.TZ=new A.m(!0,B.CS,null,null,null,null,16,B.X,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Vm=new A.cg("Total Carbon Footprint",null,B.TZ,null,null,null,null,null,null)
+B.Vl=new A.cg("Total Carbon Footprint",null,B.TZ,null,null,null,null,null,null)
 B.A5=new A.m(!0,B.F,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Vn=new A.cg("Please Log in to your account.",null,B.A5,null,null,null,null,null,null)
+B.Vm=new A.cg("Please Log in to your account.",null,B.A5,null,null,null,null,null,null)
 B.Sz=new A.m(!0,B.o,null,null,null,null,12,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Vo=new A.cg("By signing up you agree to our terms and that you have read our data policy.",null,B.Sz,null,null,null,null,null,null)
+B.Vn=new A.cg("By signing up you agree to our terms and that you have read our data policy.",null,B.Sz,null,null,null,null,null,null)
 B.ii=new A.cg("Retry",null,null,null,null,null,null,null,null)
-B.Vp=new A.cg("Carbon Footprint by Farm",null,B.lb,null,null,null,null,null,null)
+B.Vo=new A.cg("Carbon Footprint by Farm",null,B.lb,null,null,null,null,null,null)
 B.UG=new A.m(!0,B.o,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Vq=new A.cg("No reduction insights available",null,B.UG,null,null,null,null,null,null)
+B.Vp=new A.cg("No reduction insights available",null,B.UG,null,null,null,null,null,null)
 B.U4=new A.m(!0,B.az,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Vr=new A.cg("Forgot password?",null,B.U4,null,null,null,null,null,null)
-B.Vu=new A.cg("Please fill in the details to register.",null,B.A5,null,null,null,null,null,null)
-B.Vv=new A.cg("Back to Login",null,null,null,null,null,null,null,null)
+B.Vq=new A.cg("Forgot password?",null,B.U4,null,null,null,null,null,null)
+B.Vt=new A.cg("Please fill in the details to register.",null,B.A5,null,null,null,null,null,null)
+B.Vu=new A.cg("Back to Login",null,null,null,null,null,null,null,null)
 B.TR=new A.m(!0,B.h,null,null,null,null,17,B.p,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Vw=new A.cg("\u2601\ufe0f Partly Cloudy",null,B.TR,null,null,null,null,null,null)
+B.Vv=new A.cg("\u2601\ufe0f Partly Cloudy",null,B.TR,null,null,null,null,null,null)
+B.RU=new A.m(!0,B.h,null,null,null,null,75,null,null,-2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
+B.Vw=new A.cg("34.0\xb0C",null,B.RU,null,null,null,null,null,null)
 B.lc=new A.cg("",null,null,null,null,null,null,null,null)
 B.Vx=new A.cg("Reduction Insights",null,B.lb,null,null,null,null,null,null)
 B.YY=new A.agG(0,"system")
