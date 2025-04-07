@@ -64,19 +64,21 @@ jobs:
     permissions:
       pages: write      # Required for GitHub Pages deployment
       id-token: write   # Required for actions/deploy-pages
+    environment:
+      name: github-pages  # Added environment as required
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5  # Updated to latest version
+        uses: actions/configure-pages@v5
 
       - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3  # Updated to latest version
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./docs
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4  # Updated to latest version
+        uses: actions/deploy-pages@v4
