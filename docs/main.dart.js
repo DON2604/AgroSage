@@ -40388,7 +40388,7 @@ var $async$wq=A.L(function(a,b){if(a===1){p.push(b)
 s=q}while(true)switch(s){case 0:q=3
 l=t.N
 s=6
-return A.Q(A.Yo(A.ea("https://1028-45-112-68-8.ngrok-free.app/carbon-footprint",0,null),A.ai(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],l,l)),$async$wq)
+return A.Q(A.Yo(A.ea("https://accenture-hack.onrender.com/carbon-footprint",0,null),A.ai(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],l,l)),$async$wq)
 case 6:n=b
 if(n.b===200)o.a6(new A.ajw(o,n))
 else o.a6(new A.ajx(o,n))
@@ -40524,7 +40524,7 @@ s=q}while(true)switch(s){case 0:o.a6(new A.ane(o))
 q=3
 k=t.N
 s=6
-return A.Q(A.Yo(A.ea("https://1028-45-112-68-8.ngrok-free.app/market-trends",0,null),A.ai(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qr(B.EQ),$async$rl)
+return A.Q(A.Yo(A.ea("https://accenture-hack.onrender.com/market-trends",0,null),A.ai(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qr(B.EQ),$async$rl)
 case 6:n=b
 if(n.b===200){k=n
 m=B.aN.cZ(A.wm(A.wc(k.e).c.a.h(0,"charset")).cZ(k.w))
@@ -40746,7 +40746,7 @@ s=q}while(true)switch(s){case 0:o.a6(new A.aqp(o))
 q=3
 k=t.N
 s=6
-return A.Q(A.Yo(A.ea("https://1028-45-112-68-8.ngrok-free.app/sustainability",0,null),A.ai(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qr(B.EW),$async$rm)
+return A.Q(A.Yo(A.ea("https://accenture-hack.onrender.com/sustainability",0,null),A.ai(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qr(B.EW),$async$rm)
 case 6:n=b
 if(n.b===200){k=n
 m=B.aN.cZ(A.wm(A.wc(k.e).c.a.h(0,"charset")).cZ(k.w))
@@ -40966,7 +40966,7 @@ s=q}while(true)switch(s){case 0:o.a6(new A.arC(o))
 q=3
 k=t.N
 s=6
-return A.Q(A.Yo(A.ea("https://1028-45-112-68-8.ngrok-free.app/water-usage",0,null),A.ai(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qr(B.no),$async$rn)
+return A.Q(A.Yo(A.ea("https://accenture-hack.onrender.com/water-usage",0,null),A.ai(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qr(B.no),$async$rn)
 case 6:n=b
 if(n.b===200){k=n
 m=B.aN.cZ(A.wm(A.wc(k.e).c.a.h(0,"charset")).cZ(k.w))
@@ -41117,7 +41117,7 @@ ro(){var s=0,r=A.P(t.H),q=1,p=[],o=this,n,m,l,k,j,i,h
 var $async$ro=A.L(function(a,b){if(a===1){p.push(b)
 s=q}while(true)switch(s){case 0:o.a6(new A.ap6(o))
 q=3
-n=A.ea("https://1028-45-112-68-8.ngrok-free.app/weather",0,null)
+n=A.ea("https://accenture-hack.onrender.com/weather",0,null)
 j=t.N
 s=6
 return A.Q(A.Yo(n,A.ai(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],j,j)).qr(B.no),$async$ro)
@@ -41249,7 +41249,7 @@ x9(){var s=0,r=A.P(t.H),q=1,p=[],o=[],n=this,m,l,k,j,i,h,g,f
 var $async$x9=A.L(function(a,b){if(a===1){p.push(b)
 s=q}while(true)switch(s){case 0:n.a6(new A.amR(n))
 q=3
-j=A.ea("https://1028-45-112-68-8.ngrok-free.app/api/register",0,null)
+j=A.ea("https://accenture-hack.onrender.com/api/register",0,null)
 i=t.N
 h=A.ai(["Content-Type","application/json"],i,i)
 s=6
@@ -41281,7 +41281,7 @@ lJ(){var s=0,r=A.P(t.H),q=1,p=[],o=[],n=this,m,l,k,j,i,h,g,f,e
 var $async$lJ=A.L(function(a,b){if(a===1){p.push(b)
 s=q}while(true)switch(s){case 0:n.a6(new A.amM(n))
 q=3
-i=A.ea("https://1028-45-112-68-8.ngrok-free.app/api/login",0,null)
+i=A.ea("https://accenture-hack.onrender.com/api/login",0,null)
 h=t.N
 g=A.ai(["Content-Type","application/json"],h,h)
 s=6
