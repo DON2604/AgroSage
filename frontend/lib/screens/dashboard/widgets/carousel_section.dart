@@ -23,7 +23,7 @@ class CarouselSection extends StatelessWidget {
             Colors.white),
         _carouselItem("🕒 4:00 PM", "Pack harvested crops", "Not-Started",
             Colors.white),
-        _carouselItem("🕒 4:00 PM", "Pack harvested crops", "Not-Started",
+        _carouselItem("🕒 4:00 PM", "Take a break", "Not-Started",
             Colors.white),
       ],
     );
@@ -53,14 +53,14 @@ class CarouselSection extends StatelessWidget {
                 )
               ],
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 0),
             Center(
               child: Text(
                 title,
                 style: const TextStyle(
                     color: Color.fromARGB(255, 29, 28, 28),
                     fontWeight: FontWeight.bold,
-                    fontSize: 18),
+                    fontSize: 16),
               ),
             ),
             Align(

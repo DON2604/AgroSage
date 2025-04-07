@@ -35,7 +35,7 @@ class _WaterUsageDashboardState extends State<WaterUsageDashboard> {
         'User-Agent': 'PostmanRuntime/7.36.0', 
         'ngrok-skip-browser-warning': 'true',
       },)
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 100000));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = json.decode(response.body);
@@ -282,7 +282,9 @@ class _WaterUsageDashboardState extends State<WaterUsageDashboard> {
         barTouchData: BarTouchData(
           enabled: true,
           touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Colors.white,
+            getTooltipColor: (value) {
+              return Colors.white;
+            },
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               final farm = farmData[groupIndex];
               return BarTooltipItem(

@@ -494,7 +494,9 @@ class _SustainabilityDashboardState extends State<SustainabilityDashboard> {
         barTouchData: BarTouchData(
           enabled: true,
           touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Colors.white,
+            getTooltipColor: (value) {
+              return Colors.white;
+            },
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               return BarTooltipItem(
                 '${crops[groupIndex].crop}\nScore: ${crops[groupIndex].score.toStringAsFixed(1)}',

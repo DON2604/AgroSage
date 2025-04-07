@@ -349,7 +349,9 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
         barTouchData: BarTouchData(
           enabled: true,
           touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Colors.white,
+            getTooltipColor: (value) {
+              return Colors.white;
+            },
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               final label = groupIndex == 0
                   ? 'Rising: ${percentRising.toStringAsFixed(1)}%'
@@ -559,7 +561,9 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
         barTouchData: BarTouchData(
           enabled: true,
           touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Colors.white,
+            getTooltipColor: (value) {
+              return Colors.white;
+            },
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               final cropName = cropNames[groupIndex];
               final price = crops[cropName]!['Market_Price_per_ton'];

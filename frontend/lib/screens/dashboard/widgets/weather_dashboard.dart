@@ -113,7 +113,7 @@ class _RightDashboardState extends State<RightDashboard> {
         'Accept': 'application/json',
         'User-Agent': 'PostmanRuntime/7.36.0', 
         'ngrok-skip-browser-warning': 'true', 
-      },).timeout(const Duration(seconds: 10));
+      },).timeout(const Duration(seconds: 100000));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = json.decode(response.body);

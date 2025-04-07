@@ -7,7 +7,8 @@ class CarbonFootprintDashboard extends StatefulWidget {
   const CarbonFootprintDashboard({Key? key}) : super(key: key);
 
   @override
-  State<CarbonFootprintDashboard> createState() => _CarbonFootprintDashboardState();
+  State<CarbonFootprintDashboard> createState() =>
+      _CarbonFootprintDashboardState();
 }
 
 class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
@@ -21,34 +22,34 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
     _fetchData();
   }
 
-Future<void> _fetchData() async {
-  try {
-    final response = await http.get(
-      Uri.parse('https://1028-45-112-68-8.ngrok-free.app/carbon-footprint'),
-      headers: {
-        'Accept': 'application/json',
-        'User-Agent': 'PostmanRuntime/7.36.0', 
-        'ngrok-skip-browser-warning': 'true', 
-      },
-    );
-    if (response.statusCode == 200) {
+  Future<void> _fetchData() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://1028-45-112-68-8.ngrok-free.app/carbon-footprint'),
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent': 'PostmanRuntime/7.36.0',
+          'ngrok-skip-browser-warning': 'true',
+        },
+      );
+      if (response.statusCode == 200) {
+        setState(() {
+          _data = json.decode(response.body);
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _error = 'Failed to load data: ${response.statusCode}';
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
       setState(() {
-        _data = json.decode(response.body);
-        _isLoading = false;
-      });
-    } else {
-      setState(() {
-        _error = 'Failed to load data: ${response.statusCode}';
+        _error = 'Error: $e';
         _isLoading = false;
       });
     }
-  } catch (e) {
-    setState(() {
-      _error = 'Error: $e';
-      _isLoading = false;
-    });
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -57,15 +58,18 @@ Future<void> _fetchData() async {
     }
 
     if (_error != null) {
-      return Center(child: Text(_error!, style: const TextStyle(color: Colors.red)));
+      return Center(
+          child: Text(_error!, style: const TextStyle(color: Colors.red)));
     }
 
     if (_data == null) {
       return const Center(child: Text('No data available'));
     }
 
-    final farmData = _data!['carbon_footprint_calculation']['farm_data'] as List;
-    final totalCarbonFootprint = _data!['carbon_footprint_calculation']['total_carbon_footprint'];
+    final farmData =
+        _data!['carbon_footprint_calculation']['farm_data'] as List;
+    final totalCarbonFootprint =
+        _data!['carbon_footprint_calculation']['total_carbon_footprint'];
     final reductions = _data!['reduction_insights']['reductions'] as List;
     final trends = _data!['web_carbon_trends']['reduction_strategies'] as List;
 
@@ -187,10 +191,15 @@ Future<void> _fetchData() async {
             child: BarChart(
               BarChartData(
                 alignment: BarChartAlignment.spaceAround,
-                maxY: (farmData.map((e) => e['carbon_footprint']).reduce((a, b) => a > b ? a : b) * 1.2),
+                maxY: (farmData
+                        .map((e) => e['carbon_footprint'])
+                        .reduce((a, b) => a > b ? a : b) *
+                    1.2),
                 barTouchData: BarTouchData(
                   touchTooltipData: BarTouchTooltipData(
-                    tooltipBgColor: Colors.grey.shade800,
+                    getTooltipColor: (value) {
+                      return Colors.white;
+                    },
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
                       return BarTooltipItem(
                         '${farmData[groupIndex]['crop_type']}\n${rod.toY.toStringAsFixed(2)} kg CO₂e',
@@ -207,7 +216,8 @@ Future<void> _fetchData() async {
                       getTitlesWidget: (value, meta) {
                         return SideTitleWidget(
                           axisSide: meta.axisSide,
-                          child: Text('Farm ${farmData[value.toInt()]['farm_id']}'),
+                          child: Text(
+                              'Farm ${farmData[value.toInt()]['farm_id']}'),
                         );
                       },
                       reservedSize: 30,
@@ -225,8 +235,10 @@ Future<void> _fetchData() async {
                       reservedSize: 40,
                     ),
                   ),
-                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles:
+                      AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles:
+                      AxisTitles(sideTitles: SideTitles(showTitles: false)),
                 ),
                 borderData: FlBorderData(show: false),
                 barGroups: List.generate(
@@ -329,15 +341,19 @@ Future<void> _fetchData() async {
             itemBuilder: (context, index) {
               final reduction = reductions[index];
               final hasInsights = (reduction['insights'] as List).isNotEmpty;
-              
+
               return Container(
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: hasInsights ? const Color(0xFFF0FDF4) : const Color(0xFFFEF2F2),
+                  color: hasInsights
+                      ? const Color(0xFFF0FDF4)
+                      : const Color(0xFFFEF2F2),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: hasInsights ? const Color(0xFFBBF7D0) : const Color(0xFFFECACA),
+                    color: hasInsights
+                        ? const Color(0xFFBBF7D0)
+                        : const Color(0xFFFECACA),
                     width: 1,
                   ),
                 ),
@@ -355,9 +371,12 @@ Future<void> _fetchData() async {
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 4),
                           decoration: BoxDecoration(
-                            color: hasInsights ? const Color(0xFF22C55E) : Colors.grey,
+                            color: hasInsights
+                                ? const Color(0xFF22C55E)
+                                : Colors.grey,
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Text(
@@ -379,10 +398,12 @@ Future<void> _fetchData() async {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Icon(Icons.eco, color: Color(0xFF22C55E), size: 18),
+                              const Icon(Icons.eco,
+                                  color: Color(0xFF22C55E), size: 18),
                               const SizedBox(width: 8),
                               Expanded(
-                                child: Text((reduction['insights'] as List)[insightIndex]),
+                                child: Text((reduction['insights']
+                                    as List)[insightIndex]),
                               ),
                             ],
                           ),
@@ -462,7 +483,8 @@ Future<void> _fetchData() async {
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
                             color: const Color(0xFF3B82F6),
                             borderRadius: BorderRadius.circular(16),
