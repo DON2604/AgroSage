@@ -40167,7 +40167,7 @@ var $async$wc=A.L(function(a,b){if(a===1){p.push(b)
 s=q}while(true)switch(s){case 0:q=3
 l=t.N
 s=6
-return A.Q(A.Y6(A.ej("https://accenture-hack.onrender.com/carbon-footprint",0,null),A.aj(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],l,l)),$async$wc)
+return A.Q(A.Y6(A.ej("https://accenturehack-production.up.railway.app/carbon-footprint",0,null),A.aj(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],l,l)),$async$wc)
 case 6:n=b
 if(n.b===200)o.aa(new A.aj9(o,n))
 else o.aa(new A.aja(o,n))
@@ -40303,7 +40303,7 @@ s=q}while(true)switch(s){case 0:o.aa(new A.amJ(o))
 q=3
 k=t.N
 s=6
-return A.Q(A.Y6(A.ej("https://accenture-hack.onrender.com/market-trends",0,null),A.aj(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qj(B.ED),$async$rd)
+return A.Q(A.Y6(A.ej("https://accenturehack-production.up.railway.app/market-trends",0,null),A.aj(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qj(B.ED),$async$rd)
 case 6:n=b
 if(n.b===200){k=n
 m=B.aZ.d8(A.GJ(A.GE(k.e).c.a.h(0,"charset")).d8(k.w))
@@ -40525,7 +40525,7 @@ s=q}while(true)switch(s){case 0:o.aa(new A.apN(o))
 q=3
 k=t.N
 s=6
-return A.Q(A.Y6(A.ej("https://accenture-hack.onrender.com/sustainability",0,null),A.aj(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qj(B.EJ),$async$re)
+return A.Q(A.Y6(A.ej("https://accenturehack-production.up.railway.app/sustainability",0,null),A.aj(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qj(B.EJ),$async$re)
 case 6:n=b
 if(n.b===200){k=n
 m=B.aZ.d8(A.GJ(A.GE(k.e).c.a.h(0,"charset")).d8(k.w))
@@ -40745,7 +40745,7 @@ s=q}while(true)switch(s){case 0:o.aa(new A.ar_(o))
 q=3
 k=t.N
 s=6
-return A.Q(A.Y6(A.ej("https://accenture-hack.onrender.com/water-usage",0,null),A.aj(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qj(B.ne),$async$rf)
+return A.Q(A.Y6(A.ej("https://accenturehack-production.up.railway.app/water-usage",0,null),A.aj(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qj(B.ne),$async$rf)
 case 6:n=b
 if(n.b===200){k=n
 m=B.aZ.d8(A.GJ(A.GE(k.e).c.a.h(0,"charset")).d8(k.w))
@@ -40896,7 +40896,7 @@ rg(){var s=0,r=A.P(t.H),q=1,p=[],o=this,n,m,l,k,j,i,h
 var $async$rg=A.L(function(a,b){if(a===1){p.push(b)
 s=q}while(true)switch(s){case 0:o.aa(new A.aoB(o))
 q=3
-n=A.ej("https://accenture-hack.onrender.com/weather",0,null)
+n=A.ej("https://accenturehack-production.up.railway.app/weather",0,null)
 j=t.N
 s=6
 return A.Q(A.Y6(n,A.aj(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],j,j)).qj(B.ne),$async$rg)
@@ -41028,7 +41028,7 @@ lJ(){var s=0,r=A.P(t.H),q=1,p=[],o=[],n=this,m,l,k,j,i,h,g,f,e
 var $async$lJ=A.L(function(a,b){if(a===1){p.push(b)
 s=q}while(true)switch(s){case 0:n.aa(new A.amj(n))
 q=3
-i=A.ej("https://accenture-hack.onrender.com/api/login",0,null)
+i=A.ej("https://accenturehack-production.up.railway.app/api/login",0,null)
 h=t.N
 g=A.aj(["Content-Type","application/json"],h,h)
 s=6

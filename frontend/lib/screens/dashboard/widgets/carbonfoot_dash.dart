@@ -25,7 +25,8 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
   Future<void> _fetchData() async {
     try {
       final response = await http.get(
-        Uri.parse('https://accenture-hack.onrender.com/carbon-footprint'),
+        Uri.parse(
+            'https://accenturehack-production.up.railway.app/carbon-footprint'),
         headers: {
           'Accept': 'application/json',
           'User-Agent': 'PostmanRuntime/7.36.0',
@@ -74,7 +75,7 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
     final trends = _data!['web_carbon_trends']['reduction_strategies'] as List;
 
     return Padding(
-      padding: const EdgeInsets.only(right:16,left: 16,bottom: 16,top: 0),
+      padding: const EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 0),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,7 +218,9 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
                         return SideTitleWidget(
                           axisSide: meta.axisSide,
                           child: Text(
-                              'Farm ${farmData[value.toInt()]['farm_id']}'),
+                            'Farm ${farmData[value.toInt()]['farm_id']}',
+                            style: const TextStyle(color: Color.fromARGB(255, 6, 111, 87)),
+                          ),
                         );
                       },
                       reservedSize: 30,
@@ -229,7 +232,7 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
                       getTitlesWidget: (value, meta) {
                         return SideTitleWidget(
                           axisSide: meta.axisSide,
-                          child: Text(value.toInt().toString()),
+                          child: Text(value.toInt().toString(),style: TextStyle(color: const Color.fromARGB(255, 3, 58, 5)),),
                         );
                       },
                       reservedSize: 40,
@@ -289,7 +292,7 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
           ),
         ),
         const SizedBox(width: 8),
-        Text(label),
+        Text(label,style: const TextStyle(color: Colors.black),),
       ],
     );
   }
@@ -368,6 +371,7 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 132, 106, 2)
                           ),
                         ),
                         Container(
@@ -403,7 +407,7 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text((reduction['insights']
-                                    as List)[insightIndex]),
+                                    as List)[insightIndex],style: TextStyle(color: const Color.fromARGB(255, 41, 70, 2),fontWeight: FontWeight.w700),),
                               ),
                             ],
                           ),
@@ -412,7 +416,7 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
                     ] else ...[
                       const SizedBox(height: 8),
                       const Text('No reduction insights available',
-                          style: TextStyle(color: Colors.grey)),
+                          style: TextStyle(color: Color.fromARGB(255, 43, 6, 6),fontWeight: FontWeight.w700)),
                     ],
                   ],
                 ),
@@ -479,6 +483,7 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(209, 88, 67, 2)
                             ),
                           ),
                         ),
@@ -503,7 +508,7 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
                     Text(
                       'Source: ${trend['source']}',
                       style: const TextStyle(
-                        color: Colors.grey,
+                        color: Color.fromARGB(255, 100, 60, 4),
                         fontStyle: FontStyle.italic,
                       ),
                     ),

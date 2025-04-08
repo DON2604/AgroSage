@@ -30,7 +30,7 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
 
     try {
       final response = await http
-          .get(Uri.parse('https://accenture-hack.onrender.com/market-trends'),headers: {
+          .get(Uri.parse('https://accenturehack-production.up.railway.app/market-trends'),headers: {
         'Accept': 'application/json',
         'User-Agent': 'PostmanRuntime/7.36.0', 
         'ngrok-skip-browser-warning': 'true', 

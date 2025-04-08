@@ -32,7 +32,7 @@ class _SustainabilityDashboardState extends State<SustainabilityDashboard> {
 
     try {
       final response = await http
-          .get(Uri.parse('https://accenture-hack.onrender.com/sustainability'),
+          .get(Uri.parse('https://accenturehack-production.up.railway.app/sustainability'),
           headers: {
         'Accept': 'application/json',
         'User-Agent': 'PostmanRuntime/7.36.0', 

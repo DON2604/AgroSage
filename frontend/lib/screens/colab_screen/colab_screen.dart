@@ -57,7 +57,7 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
   }
 
   Future<void> _sendTicket() async {
-    final url = Uri.parse('https://accenture-hack.onrender.com/api/tickets');
+    final url = Uri.parse('https://accenturehack-production.up.railway.app/api/tickets');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -77,7 +77,7 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
   }
 
   Future<void> _fetchTickets() async {
-    final url = Uri.parse('https://accenture-hack.onrender.com/api/tickets');
+    final url = Uri.parse('https://accenturehack-production.up.railway.app/api/tickets');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -94,7 +94,7 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
       _isLoadingResponses = true;
     });
 
-    final url = Uri.parse('https://accenture-hack.onrender.com/api/responses');
+    final url = Uri.parse('https://accenturehack-production.up.railway.app/api/responses');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
