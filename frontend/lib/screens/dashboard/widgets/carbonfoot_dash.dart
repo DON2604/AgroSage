@@ -74,7 +74,7 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
     final trends = _data!['web_carbon_trends']['reduction_strategies'] as List;
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(right:16,left: 16,bottom: 16,top: 0),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -9,35 +9,26 @@ import './widgets/carousel_section.dart';
 import './widgets/greeting_weather.dart';
 import './widgets/scrollable_list.dart';
 import './widgets/side_panel.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  _DashboardScreenState createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final CarouselSliderController _carouselController = CarouselSliderController();
+  final PageController _pageController = PageController();
   int _currentDashboardIndex = 0;
-  
+
   final List<Widget> _dashboards = const [
     CarbonFootprintDashboard(),
     MarketTrendDashboard(),
     WaterUsageDashboard(),
-    RightDashboard(), 
+    RightDashboard(),
     SustainabilityDashboard(),
   ];
-  
-  final List<String> _dashboardTitles = const [
-    "Carbon Footprint",
-    "Market Trends",
-    "Water Usage",
-    "Weather Forecast",
-    "Sustainability",
-  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -81,81 +72,82 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            _dashboardTitles[_currentDashboardIndex],
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.arrow_back_ios, size: 18),
-                                onPressed: _currentDashboardIndex > 0 
-                                  ? () {
-                                      _carouselController.previousPage();
-                                    }
-                                  : null,
-                                color: _currentDashboardIndex > 0 ? Colors.black54 : Colors.grey.withOpacity(0.3),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.arrow_forward_ios, size: 18),
-                                onPressed: _currentDashboardIndex < _dashboards.length - 1 
-                                  ? () {
-                                      _carouselController.nextPage();
-                                    }
-                                  : null,
-                                color: _currentDashboardIndex < _dashboards.length - 1 ? Colors.black54 : Colors.grey.withOpacity(0.3),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Expanded(
-                      child: CarouselSlider(
-                        carouselController: _carouselController,
-                        options: CarouselOptions(
-                          height: double.infinity,
-                          viewportFraction: 1.0,
-                          enableInfiniteScroll: false,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _currentDashboardIndex = index;
-                            });
-                          },
-                        ),
-                        items: _dashboards.map((dashboard) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              return Container(
-                                width: MediaQuery.of(context).size.width,
-                                child: dashboard,
-                              );
-                            },
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 6,),
+                    // Horizontal timeline of dots
+// Timeline-style dot navigation
                     Center(
-                      child: AnimatedSmoothIndicator(
-                        activeIndex: _currentDashboardIndex,
-                        count: _dashboards.length,
-                        effect: ExpandingDotsEffect(
-                          dotHeight: 8,
-                          dotWidth: 8,
-                          activeDotColor: Theme.of(context).primaryColor,
-                          dotColor: Colors.grey.withOpacity(0.3),
+                      child: SizedBox(
+                        height: 40,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            // Line
+                            Positioned.fill(
+                              top: 20,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 24),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color: const Color.fromARGB(189, 12, 134, 3).withOpacity(0.4),
+                                        width: 2,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Dots
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children:
+                                  List.generate(_dashboards.length, (index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _currentDashboardIndex = index;
+                                      _pageController.jumpToPage(index);
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: _currentDashboardIndex == index
+                                          ? const Color.fromARGB(255, 5, 121, 9)
+                                          : Colors.white,
+                                      border: Border.all(
+                                        color: _currentDashboardIndex == index
+                                            ? Theme.of(context).primaryColor
+                                            : const Color.fromARGB(255, 35, 140, 6).withOpacity(0.5),
+                                        width: 2,
+                                      ),
+                                    ),
+                                    width: 15,
+                                    height: 15,
+                                  ),
+                                );
+                              }),
+                            ),
+                          ],
                         ),
+                      ),
+                    ),
+                    // PageView instead of CarouselSlider
+                    Expanded(
+                      child: PageView.builder(
+                        controller: _pageController,
+                        onPageChanged: (index) {
+                          setState(() {
+                            _currentDashboardIndex = index;
+                          });
+                        },
+                        itemCount: _dashboards.length,
+                        itemBuilder: (context, index) {
+                          return _dashboards[index];
+                        },
                       ),
                     ),
                   ],
