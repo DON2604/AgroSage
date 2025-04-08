@@ -24,7 +24,7 @@ class GreetingWeather extends StatelessWidget {
                 builder: (context, snapshot) {
                   String name = snapshot.data ?? '';
                   return Text(
-                    "Hi, Good Morning${name.isNotEmpty ? ' $name' : ''}...",
+                    "Hi, Good Morning,${name.isNotEmpty ? ' $name' : ''}...",
                     style: const TextStyle(fontSize: 25, color: Colors.white),
                   );
                 },
@@ -37,7 +37,7 @@ class GreetingWeather extends StatelessWidget {
               const WeatherInfo(),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             width: 50,
           ),
           Column(
