@@ -1,0 +1,28 @@
+{
+  "responses": [
+    {
+      "id": 1,
+      "ticket_id": 101,
+      "title": "Problem solved",
+      "description": "This is the first response to ticket 101."
+    },
+    {
+      "id": 2,
+      "ticket_id": 102,
+      "title": "go home",
+      "description": "This is the first response to ticket 102."
+    },
+    {
+      "id": 3,
+      "ticket_id": 101,
+      "title": "betch karle farming chor",
+      "description": "This is a follow-up response to ticket 101."
+    },
+    {
+      "id": 4,
+      "ticket_id": 103,
+      "title": "Response to Ticket 103",
+      "description": "This is the first response to ticket 103."
+    }
+  ]
+}
