@@ -1,10 +1,9 @@
-import 'package:farm_genius/screens/register_screen/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../dashboard/dashboardScreen.dart';
+import '../register_screen/register_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'widgets/login_form.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,11 +16,10 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool rememberMe = false;
-  bool isRegistering = false;
   bool _isLoading = false;
   String? _errorMessage;
 
-  final String apiBaseUrl = 'https://accenturehack-production.up.railway.app/api';
+  final String apiBaseUrl = 'https://52b7-45-112-68-8.ngrok-free.app/api';
 
   @override
   void initState() {
@@ -111,10 +109,11 @@ class _LoginPageState extends State<LoginPage> {
     await _login();
   }
 
-  void toggleRegister() {
-    setState(() {
-      isRegistering = !isRegistering;
-    });
+  void navigateToRegister() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const RegisterScreen()),
+    );
   }
 
   @override
@@ -129,22 +128,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.symmetric(horizontal: 48.0),
               child: Center(
                 child: SingleChildScrollView(
-                  child: isRegistering
-                      ? const RegisterScreen()
-                      : LoginForm(
-                          emailController: _emailController,
-                          passwordController: _passwordController,
-                          rememberMe: rememberMe,
-                          isLoading: _isLoading,
-                          errorMessage: _errorMessage,
-                          onLogin: handleLogin,
-                          onToggleRegister: toggleRegister,
-                          onRememberMeChanged: (value) {
-                            setState(() {
-                              rememberMe = value!;
-                            });
-                          },
-                        ),
+                  child: _buildLoginForm(),
                 ),
               ),
             ),
@@ -162,6 +146,124 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildLoginForm() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Row(
+          children: [
+            Icon(Icons.local_florist, color: Colors.green),
+            SizedBox(width: 8),
+            Text("AgroSage",
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green)),
+          ],
+        ),
+        const SizedBox(height: 40),
+        const Text("Welcome Back!",
+            style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87)),
+        const SizedBox(height: 10),
+        const Text("Please Log in to your account.",
+            style: TextStyle(color: Colors.black54)),
+        const SizedBox(height: 30),
+        TextField(
+          controller: _emailController,
+          style: const TextStyle(color: Colors.black),
+          decoration: const InputDecoration(
+            labelText: "Email Address",
+            border: OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.green),
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        TextField(
+          controller: _passwordController,
+          obscureText: true,
+          style: const TextStyle(color: Colors.black),
+          decoration: const InputDecoration(
+            labelText: "Password",
+            border: OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.green),
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            Checkbox(
+              value: rememberMe,
+              activeColor: Colors.green,
+              onChanged: (value) {
+                setState(() {
+                  rememberMe = value!;
+                });
+              },
+            ),
+            const Text("Remember me"),
+            const Spacer(),
+            TextButton(
+              onPressed: () {},
+              child: const Text("Forgot password?",
+                  style: TextStyle(color: Colors.green)),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        if (_errorMessage != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Text(
+              _errorMessage!,
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
+        Row(
+          children: [
+            ElevatedButton(
+              onPressed: _isLoading ? null : handleLogin,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+              ),
+              child: _isLoading
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                          color: Colors.white, strokeWidth: 2),
+                    )
+                  : const Text("Login", style: TextStyle(color: Colors.white)),
+            ),
+            const SizedBox(width: 20),
+            OutlinedButton(
+              onPressed: navigateToRegister,
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.green,
+                side: const BorderSide(color: Colors.green),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+              ),
+              child: const Text("Create account"),
+            ),
+          ],
+        ),
+        const SizedBox(height: 30),
+        const Text(
+          "By signing up you agree to our terms and that you have read our data policy.",
+          style: TextStyle(fontSize: 12, color: Colors.grey),
+        )
+      ],
     );
   }
 }

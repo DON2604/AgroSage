@@ -108,7 +108,7 @@ class _RightDashboardState extends State<RightDashboard> {
     });
 
     try {
-      final url = Uri.parse('https://accenturehack-production.up.railway.app/weather');
+      final url = Uri.parse('https://52b7-45-112-68-8.ngrok-free.app/weather');
       final response = await http.get(url,headers: {
         'Accept': 'application/json',
         'User-Agent': 'PostmanRuntime/7.36.0', 

@@ -57,10 +57,16 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
   }
 
   Future<void> _sendTicket() async {
-    final url = Uri.parse('https://accenturehack-production.up.railway.app/api/tickets');
+    final url =
+        Uri.parse('https://52b7-45-112-68-8.ngrok-free.app/api/tickets');
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'User-Agent': 'PostmanRuntime/7.36.0',
+        'ngrok-skip-browser-warning': 'true',
+      },
       body: jsonEncode({
         'user_id': widget.username,
         'title': 'New Ticket',
@@ -77,8 +83,16 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
   }
 
   Future<void> _fetchTickets() async {
-    final url = Uri.parse('https://accenturehack-production.up.railway.app/api/tickets');
-    final response = await http.get(url);
+    final url =
+        Uri.parse('https://52b7-45-112-68-8.ngrok-free.app/api/tickets');
+    final response = await http.get(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'PostmanRuntime/7.36.0',
+        'ngrok-skip-browser-warning': 'true',
+      },
+    );
 
     if (response.statusCode == 200) {
       setState(() {
@@ -94,8 +108,16 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
       _isLoadingResponses = true;
     });
 
-    final url = Uri.parse('https://accenturehack-production.up.railway.app/api/responses');
-    final response = await http.get(url);
+    final url =
+        Uri.parse('https://52b7-45-112-68-8.ngrok-free.app/api/responses');
+    final response = await http.get(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'PostmanRuntime/7.36.0',
+        'ngrok-skip-browser-warning': 'true',
+      },
+    );
 
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
@@ -161,7 +183,7 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 10),
       child: Column(
         children: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
@@ -179,10 +201,10 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
             children: [
               Text(
                 widget.username,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: const Color.fromARGB(255, 5, 170, 145),
+                  color: Color.fromARGB(255, 5, 170, 145),
                 ),
               ),
               const SizedBox(width: 8),
