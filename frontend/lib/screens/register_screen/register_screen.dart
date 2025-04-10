@@ -16,7 +16,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isLoading = false;
   String? _errorMessage;
 
-  final String apiBaseUrl = 'https://52b7-45-112-68-8.ngrok-free.app/api';
+  final String apiBaseUrl = 'https://dd0a-45-112-68-139.ngrok-free.app/api';
 
   Future<void> _register() async {
     setState(() {

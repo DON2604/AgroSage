@@ -58,7 +58,7 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
 
   Future<void> _sendTicket() async {
     final url =
-        Uri.parse('https://52b7-45-112-68-8.ngrok-free.app/api/tickets');
+        Uri.parse('https://dd0a-45-112-68-139.ngrok-free.app/api/tickets');
     final response = await http.post(
       url,
       headers: {
@@ -84,7 +84,7 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
 
   Future<void> _fetchTickets() async {
     final url =
-        Uri.parse('https://52b7-45-112-68-8.ngrok-free.app/api/tickets');
+        Uri.parse('https://dd0a-45-112-68-139.ngrok-free.app/api/tickets');
     final response = await http.get(
       url,
       headers: {
@@ -109,7 +109,7 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
     });
 
     final url =
-        Uri.parse('https://52b7-45-112-68-8.ngrok-free.app/api/responses');
+        Uri.parse('https://dd0a-45-112-68-139.ngrok-free.app/api/responses');
     final response = await http.get(
       url,
       headers: {
