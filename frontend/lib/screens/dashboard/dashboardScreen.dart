@@ -1,5 +1,6 @@
 import 'package:farm_genius/screens/colab_screen/colab_screen.dart';
 import 'package:farm_genius/screens/dashboard/widgets/carbonfoot_dash.dart';
+import 'package:farm_genius/screens/dashboard/widgets/dynamic_data_card.dart';
 import 'package:farm_genius/screens/dashboard/widgets/market_trend.dart';
 import 'package:farm_genius/screens/dashboard/widgets/sustain_dash.dart';
 import 'package:farm_genius/screens/dashboard/widgets/water_usage_dash.dart';
@@ -80,24 +81,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Expanded(
+              Expanded(
                 child: Column(
                   children: [
-                    SizedBox(height: 160),
-                    GreetingWeather(),
-                    SizedBox(height: 20),
-                    Padding(
+                    const SizedBox(height: 160),
+                    const GreetingWeather(),
+                    const SizedBox(height: 20),
+                    // Always show the carousel section
+                    const Padding(
                       padding: EdgeInsets.only(left: 13),
                       child: CarouselSection(),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
+                    // Conditionally show either ScrollableList or DynamicDataCard
                     Align(
                       alignment: Alignment.centerLeft,
                       child: SizedBox(
-                        width: 700,
+                        width: 680,
                         child: Padding(
                           padding: EdgeInsets.only(left: 13.0),
-                          child: ScrollableList(),
+                          child: _showSocialAppWidget
+                              ? const ScrollableList()
+                              : const SizedBox(
+                                  height: 270,
+                                  child: DynamicDataCard(),
+                                ),
                         ),
                       ),
                     ),
@@ -117,7 +125,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           : Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(height: 6),
+                                const SizedBox(height: 6),
                                 // Horizontal timeline of dots
                                 Center(
                                   child: SizedBox(
@@ -166,15 +174,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color:
-                                                      _currentDashboardIndex ==
-                                                              index
+                                                      _currentDashboardIndex == index
                                                           ? const Color
                                                                   .fromARGB(
                                                               255, 5, 121, 9)
                                                           : Colors.white,
                                                   border: Border.all(
-                                                    color: _currentDashboardIndex ==
-                                                            index
+                                                    color: _currentDashboardIndex == index
                                                         ? Theme.of(context)
                                                             .primaryColor
                                                         : const Color.fromARGB(

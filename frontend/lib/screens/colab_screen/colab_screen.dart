@@ -104,9 +104,12 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
   }
 
   Future<void> _fetchResponses([String? ticketId]) async {
-    setState(() {
-      _isLoadingResponses = true;
-    });
+    // Only show loading indicator on initial load or ticket change
+    if (_responses.isEmpty || ticketId != _selectedTicketId) {
+      setState(() {
+        _isLoadingResponses = true;
+      });
+    }
 
     final url =
         Uri.parse('https://dd0a-45-112-68-139.ngrok-free.app/api/responses');
@@ -122,23 +125,60 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       final allResponses = jsonData['responses'] ?? [];
-      setState(() {
-        _responses = ticketId != null
-            ? allResponses
-                .where((r) => r['ticket_id'].toString() == ticketId)
-                .toList()
-            : allResponses;
-        _isLoadingResponses = false;
-        _selectedTicketId = ticketId;
-      });
-      print('Fetched responses: $_responses');
+      final newResponses = ticketId != null
+          ? allResponses
+              .where((r) => r['ticket_id'].toString() == ticketId)
+              .toList()
+          : allResponses;
+      
+      // Check if the responses changed before updating state
+      final responsesChanged = _areResponsesDifferent(newResponses, _responses);
+      final ticketChanged = ticketId != _selectedTicketId;
+      
+      // Only update state if there are changes or ticket selection changed
+      if (responsesChanged || ticketChanged) {
+        setState(() {
+          _responses = newResponses;
+          _isLoadingResponses = false;
+          _selectedTicketId = ticketId;
+        });
+        print('Responses updated: $_responses');
+      } else if (_isLoadingResponses) {
+        // Just turn off loading if it was on but no changes occurred
+        setState(() {
+          _isLoadingResponses = false;
+        });
+      }
     } else {
-      setState(() {
-        _responses = [];
-        _isLoadingResponses = false;
-      });
+      if (_isLoadingResponses) {
+        setState(() {
+          _responses = [];
+          _isLoadingResponses = false;
+        });
+      }
       print('Failed to fetch responses: ${response.body}');
     }
+  }
+
+  // Helper method to check if responses are different
+  bool _areResponsesDifferent(List<dynamic> newResponses, List<dynamic> oldResponses) {
+    if (newResponses.length != oldResponses.length) {
+      return true;
+    }
+    
+    for (int i = 0; i < newResponses.length; i++) {
+      final newRes = newResponses[i];
+      final oldRes = oldResponses[i];
+      
+      // Compare essential fields for equality
+      if (newRes['id'] != oldRes['id'] ||
+          newRes['description'] != oldRes['description'] ||
+          newRes['title'] != oldRes['title']) {
+        return true;
+      }
+    }
+    
+    return false;
   }
 
   // Get a color from the predefined list, cycling through based on index
