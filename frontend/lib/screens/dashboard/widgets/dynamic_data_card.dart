@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class DynamicDataCard extends StatefulWidget {
-  const DynamicDataCard({Key? key}) : super(key: key);
+  const DynamicDataCard({super.key});
 
   @override
   _DynamicDataCardState createState() => _DynamicDataCardState();
@@ -176,9 +176,9 @@ class _DynamicDataCardState extends State<DynamicDataCard> {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
-                      color: Colors.grey[700],
+                      color: Color.fromARGB(255, 52, 44, 44),
                     ),
                   ),
                   Text(
@@ -186,6 +186,7 @@ class _DynamicDataCardState extends State<DynamicDataCard> {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 66, 63, 63),
                     ),
                   ),
                 ],
