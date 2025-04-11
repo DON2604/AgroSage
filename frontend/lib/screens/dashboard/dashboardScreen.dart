@@ -97,13 +97,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: SizedBox(
-                        width: 680,
+                        width:600,
                         child: Padding(
                           padding: EdgeInsets.only(left: 13.0),
                           child: _showSocialAppWidget
                               ? const ScrollableList()
                               : const SizedBox(
-                                  height: 270,
+                                  height: 225,
                                   child: DynamicDataCard(),
                                 ),
                         ),
