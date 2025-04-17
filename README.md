@@ -1,4 +1,4 @@
-# 🌾 AgriSmart – AI-Powered Agricultural Advisory System
+# 🌾 AgroSage – AI-Powered Agricultural Advisory System
 
 AgriSmart is an intelligent, end-to-end agricultural advisory system designed to empower farmers with real-time, data-driven insights. Built with Flask and powered by advanced AI agents and Large Language Models (LLMs), the platform automates decision-making across key agricultural domains—weather, sustainability, market trends, water usage, and carbon footprint.
 
