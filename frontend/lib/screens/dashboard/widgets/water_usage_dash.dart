@@ -30,7 +30,7 @@ class _WaterUsageDashboardState extends State<WaterUsageDashboard> {
 
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.0.101:5000/water-usage'),headers: {
+          .get(Uri.parse('https://agrosage.pagekite.me/water-usage'),headers: {
         'Accept': 'application/json',
         'User-Agent': 'PostmanRuntime/7.36.0', 
         'ngrok-skip-browser-warning': 'true',

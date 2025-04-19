@@ -30,7 +30,7 @@ class _MarketTrendDashboardState extends State<MarketTrendDashboard> {
 
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.0.101:5000/market-trends'),headers: {
+          .get(Uri.parse('https://agrosage.pagekite.me/market-trends'),headers: {
         'Accept': 'application/json',
         'User-Agent': 'PostmanRuntime/7.36.0', 
         'ngrok-skip-browser-warning': 'true', 

@@ -58,7 +58,7 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
 
   Future<void> _sendTicket() async {
     final url =
-        Uri.parse('http://192.168.0.101:5000/api/tickets');
+        Uri.parse('https://agrosage.pagekite.me/api/tickets');
     final response = await http.post(
       url,
       headers: {
@@ -84,7 +84,7 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
 
   Future<void> _fetchTickets() async {
     final url =
-        Uri.parse('http://192.168.0.101:5000/api/tickets');
+        Uri.parse('https://agrosage.pagekite.me/api/tickets');
     final response = await http.get(
       url,
       headers: {
@@ -112,7 +112,7 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
     }
 
     final url =
-        Uri.parse('http://192.168.0.101:5000/api/responses');
+        Uri.parse('https://agrosage.pagekite.me/api/responses');
     final response = await http.get(
       url,
       headers: {

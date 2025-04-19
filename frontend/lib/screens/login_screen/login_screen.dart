@@ -19,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   String? _errorMessage;
 
-  final String apiBaseUrl = 'http://192.168.0.101:5000/api';
+  final String apiBaseUrl = 'https://agrosage.pagekite.me/api';
 
   @override
   void initState() {

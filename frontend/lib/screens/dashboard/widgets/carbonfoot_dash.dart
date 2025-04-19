@@ -26,7 +26,7 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
     try {
       final response = await http.get(
         Uri.parse(
-            'http://192.168.0.101:5000/carbon-footprint'),
+            'https://agrosage.pagekite.me/carbon-footprint'),
         headers: {
           'Accept': 'application/json',
           'User-Agent': 'PostmanRuntime/7.36.0',
