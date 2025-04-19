@@ -108,7 +108,7 @@ class _RightDashboardState extends State<RightDashboard> {
     });
 
     try {
-      final url = Uri.parse('https://dd0a-45-112-68-139.ngrok-free.app/weather');
+      final url = Uri.parse('http://192.168.0.101:5000/weather');
       final response = await http.get(url,headers: {
         'Accept': 'application/json',
         'User-Agent': 'PostmanRuntime/7.36.0', 

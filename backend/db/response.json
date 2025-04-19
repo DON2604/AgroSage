@@ -3,7 +3,7 @@
     {
       "id": 1,
       "ticket_id": 101,
-      "title": "Problem solved",
+      "title": "Stop using urea",
       "description": "This is the first response to ticket 101."
     },
     {
@@ -15,7 +15,7 @@
     {
       "id": 3,
       "ticket_id": 101,
-      "title": "betch karle farming chor",
+      "title": "No idea",
       "description": "This is a follow-up response to ticket 101."
     },
     {

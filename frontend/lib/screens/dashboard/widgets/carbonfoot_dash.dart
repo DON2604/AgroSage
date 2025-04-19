@@ -26,7 +26,7 @@ class _CarbonFootprintDashboardState extends State<CarbonFootprintDashboard> {
     try {
       final response = await http.get(
         Uri.parse(
-            'https://dd0a-45-112-68-139.ngrok-free.app/carbon-footprint'),
+            'http://192.168.0.101:5000/carbon-footprint'),
         headers: {
           'Accept': 'application/json',
           'User-Agent': 'PostmanRuntime/7.36.0',

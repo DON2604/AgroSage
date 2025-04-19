@@ -32,7 +32,7 @@ class _SustainabilityDashboardState extends State<SustainabilityDashboard> {
 
     try {
       final response = await http
-          .get(Uri.parse('https://dd0a-45-112-68-139.ngrok-free.app/sustainability'),
+          .get(Uri.parse('http://192.168.0.101:5000/sustainability'),
           headers: {
         'Accept': 'application/json',
         'User-Agent': 'PostmanRuntime/7.36.0', 

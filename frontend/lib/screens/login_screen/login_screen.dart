@@ -19,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   String? _errorMessage;
 
-  final String apiBaseUrl = 'https://dd0a-45-112-68-139.ngrok-free.app/api';
+  final String apiBaseUrl = 'http://192.168.0.101:5000/api';
 
   @override
   void initState() {
