@@ -62,88 +62,90 @@ class _DynamicDataCardState extends State<DynamicDataCard> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Text(
-                  'Farm Metrics',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF225500),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text(
-                    'Live Data',
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Text(
+                    'Farm Metrics',
                     style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.green,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF225500),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              height: 175, // Adjust this height value as needed
-              child: GridView.count(
-                crossAxisCount: 3,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 2.5, // Adjust this value to make cards wider or narrower
-                shrinkWrap: true, // Makes grid take only the space it needs
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  _buildCompactMetricCard(
-                    'Soil Moisture',
-                    '${soilMoisture.toStringAsFixed(1)}%',
-                    Icons.water_drop,
-                    Colors.blue,
-                    _getStatusColor(soilMoisture, 60, 75),
+                  const SizedBox(width: 10),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.green.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Text(
+                      'Live Data',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.green,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
-                  _buildCompactMetricCard(
-                    'Temperature',
-                    '${temperature.toStringAsFixed(1)}°C',
-                    Icons.thermostat,
-                    Colors.orange,
-                    _getStatusColor(temperature, 22, 28),
-                  ),
-                  _buildCompactMetricCard(
-                    'Humidity',
-                    '${humidity.toStringAsFixed(1)}%',
-                    Icons.cloud,
-                    Colors.lightBlue,
-                    _getStatusColor(humidity, 70, 85),
-                  ),
-                  _buildCompactMetricCard(
-                    'Soil pH',
-                    soilPH.toStringAsFixed(1),
-                    Icons.science,
-                    Colors.purple,
-                    _getStatusColor(soilPH, 6.5, 7.2),
-                  ),
-                  _buildCompactMetricCard(
-                    'Light',
-                    '${lightIntensity.toStringAsFixed(1)}%',
-                    Icons.wb_sunny,
-                    Colors.amber,
-                    _getStatusColor(lightIntensity, 75, 90),
-                  ),
-                  _buildRecommendationsCard(),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+              SizedBox(
+                height: 175, // Adjust this height value as needed
+                child: GridView.count(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 2.5, // Adjust this value to make cards wider or narrower
+                  shrinkWrap: true, // Makes grid take only the space it needs
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    _buildCompactMetricCard(
+                      'Soil Moisture',
+                      '${soilMoisture.toStringAsFixed(1)}%',
+                      Icons.water_drop,
+                      Colors.blue,
+                      _getStatusColor(soilMoisture, 60, 75),
+                    ),
+                    _buildCompactMetricCard(
+                      'Temperature',
+                      '${temperature.toStringAsFixed(1)}°C',
+                      Icons.thermostat,
+                      Colors.orange,
+                      _getStatusColor(temperature, 22, 28),
+                    ),
+                    _buildCompactMetricCard(
+                      'Humidity',
+                      '${humidity.toStringAsFixed(1)}%',
+                      Icons.cloud,
+                      Colors.lightBlue,
+                      _getStatusColor(humidity, 70, 85),
+                    ),
+                    _buildCompactMetricCard(
+                      'Soil pH',
+                      soilPH.toStringAsFixed(1),
+                      Icons.science,
+                      Colors.purple,
+                      _getStatusColor(soilPH, 6.5, 7.2),
+                    ),
+                    _buildCompactMetricCard(
+                      'Light',
+                      '${lightIntensity.toStringAsFixed(1)}%',
+                      Icons.wb_sunny,
+                      Colors.amber,
+                      _getStatusColor(lightIntensity, 75, 90),
+                    ),
+                    _buildRecommendationsCard(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
