@@ -22,6 +22,8 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   firebase_auth: ^5.5.2
   flutter_riverpod: ^2.6.1
+
+
   
 
 dev_dependencies:
@@ -40,3 +42,5 @@ flutter:
     - assets/wheat.jpg
     - assets/soybean.jpg
     - assets/rice.webp
+    - assets/wave.gif
+    - assets/agent.gif

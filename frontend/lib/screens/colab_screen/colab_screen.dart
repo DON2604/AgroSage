@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'node_communication_animation.dart'; // Import the new animation widget
 
 class SocialAppWidget extends StatefulWidget {
   final String username;
@@ -24,6 +25,8 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
   bool _isLoadingResponses = false;
   Timer? _timer;
   String? _selectedTicketId;
+  bool _showAnimation = false; // Flag to control animation visibility
+  Map<String, dynamic>? _agentFeedback; // Add this property to store agent feedback
 
   // Predefined list of good colors in ARGB format
   static const List<Color> _cardColors = [
@@ -51,40 +54,108 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
   }
 
   void _startPeriodicFetch() {
-    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 8), (timer) {
       _fetchResponses(_selectedTicketId);
     });
   }
 
   Future<void> _sendTicket() async {
-    final url =
-        Uri.parse('https://agrosage.pagekite.me/api/tickets');
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'User-Agent': 'PostmanRuntime/7.36.0',
-        'ngrok-skip-browser-warning': 'true',
-      },
-      body: jsonEncode({
-        'user_id': widget.username,
-        'title': 'New Ticket',
-        'description': _messageController.text,
-      }),
-    );
+    final String query = _messageController.text;
 
-    if (response.statusCode == 201) {
-      _messageController.clear();
-      _fetchTickets();
-    } else {
-      print('Failed to send ticket: ${response.body}');
+    // Show the animation immediately
+    setState(() {
+      _showAnimation = true;
+    });
+
+    try {
+      final url = Uri.parse('https://agrosage.pagekite.me/api/tickets');
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'User-Agent': 'PostmanRuntime/7.36.0',
+          'ngrok-skip-browser-warning': 'true',
+        },
+        body: jsonEncode({
+          'user_id': widget.username,
+          'title': 'New Ticket',
+          'description': query,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        _messageController.clear();
+        _fetchTickets();
+        // Fetch agent feedback and only hide animation when feedback is loaded
+        await _fetchAgentFeedback(query);
+      } else {
+        print('Failed to send ticket: ${response.body}');
+        // Hide animation on error
+        setState(() {
+          _showAnimation = false;
+        });
+      }
+    } catch (e) {
+      print('Error sending ticket: $e');
+      // Hide animation on error
+      setState(() {
+        _showAnimation = false;
+      });
+    }
+  }
+
+  Future<void> _fetchAgentFeedback(String query) async {
+    try {
+      final url = Uri.parse('https://agrosage.pagekite.me/feedback');
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'User-Agent': 'PostmanRuntime/7.36.0',
+          'ngrok-skip-browser-warning': 'true',
+        },
+        body: jsonEncode({
+          "query": query
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        // Extract the 'data' field, which contains the actual feedback
+        final Map<String, dynamic>? feedbackData = responseData['data'];
+        if (feedbackData != null && responseData['success'] == true) {
+          setState(() {
+            _agentFeedback = feedbackData; // Store feedbackData (contains query, feedback, timestamp)
+            _showAnimation = false; // Hide animation after feedback is loaded
+          });
+          print('Agent feedback received: $feedbackData');
+        } else {
+          print('Feedback data is null or success is false: ${response.body}');
+          setState(() {
+            _agentFeedback = null; // Reset feedback if invalid
+            _showAnimation = false; // Hide animation if invalid feedback
+          });
+        }
+      } else {
+        print('Failed to fetch agent feedback: ${response.body}');
+        setState(() {
+          _agentFeedback = null; // Reset feedback on failure
+          _showAnimation = false; // Hide animation on failure
+        });
+      }
+    } catch (e) {
+      print('Error fetching agent feedback: $e');
+      setState(() {
+        _agentFeedback = null; // Reset feedback on error
+        _showAnimation = false; // Hide animation on error
+      });
     }
   }
 
   Future<void> _fetchTickets() async {
-    final url =
-        Uri.parse('https://agrosage.pagekite.me/api/tickets');
+    final url = Uri.parse('https://agrosage.pagekite.me/api/tickets');
     final response = await http.get(
       url,
       headers: {
@@ -111,8 +182,7 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
       });
     }
 
-    final url =
-        Uri.parse('https://agrosage.pagekite.me/api/responses');
+    final url = Uri.parse('https://agrosage.pagekite.me/api/responses');
     final response = await http.get(
       url,
       headers: {
@@ -130,11 +200,11 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
               .where((r) => r['ticket_id'].toString() == ticketId)
               .toList()
           : allResponses;
-      
+
       // Check if the responses changed before updating state
       final responsesChanged = _areResponsesDifferent(newResponses, _responses);
       final ticketChanged = ticketId != _selectedTicketId;
-      
+
       // Only update state if there are changes or ticket selection changed
       if (responsesChanged || ticketChanged) {
         setState(() {
@@ -165,11 +235,11 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
     if (newResponses.length != oldResponses.length) {
       return true;
     }
-    
+
     for (int i = 0; i < newResponses.length; i++) {
       final newRes = newResponses[i];
       final oldRes = oldResponses[i];
-      
+
       // Compare essential fields for equality
       if (newRes['id'] != oldRes['id'] ||
           newRes['description'] != oldRes['description'] ||
@@ -177,7 +247,7 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
         return true;
       }
     }
-    
+
     return false;
   }
 
@@ -188,34 +258,36 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: widget.width,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: const Color.fromARGB(109, 28, 227, 35).withOpacity(0.1),
-            spreadRadius: 2,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildHeader(),
-            _buildInputField(),
-            _buildTimeOptions(),
-            _buildTicketsList(),
-            _buildGreenLine(),
-            _buildResponsesSection(),
-          ],
-        ),
-      ),
-    );
+    return _showAnimation
+        ? NodeCommunicationAnimation()
+        : Container(
+            width: widget.width,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color.fromARGB(109, 28, 227, 35).withOpacity(0.1),
+                  spreadRadius: 2,
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildHeader(),
+                  _buildInputField(),
+                  _buildTimeOptions(),
+                  _buildTicketsList(),
+                  _buildGreenLine(),
+                  _buildResponsesSection(),
+                ],
+              ),
+            ),
+          );
   }
 
   Widget _buildHeader() {
@@ -248,7 +320,11 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
                 ),
               ),
               const SizedBox(width: 8),
-              Icon(Icons.waving_hand, color: Colors.amber),
+              Image.asset(
+                'assets/wave.gif',
+                width: 26,
+                height: 26,
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -403,35 +479,81 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
           const SizedBox(height: 8),
           if (_isLoadingResponses)
             const Center(child: CircularProgressIndicator())
-          else if (_responses.isEmpty)
+          else if (_responses.isEmpty && _agentFeedback == null)
             const Text('No responses available.')
           else
             SizedBox(
-              height: 200,
+              height: 270,
               child: SingleChildScrollView(
                 child: Column(
-                  children: _responses.asMap().entries.map((entry) {
-                    final index = entry.key;
-                    final response = entry.value;
-                    return Card(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      color: _getCardColor(
-                          index), // Cycle through predefined colors
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: ListTile(
-                        title: Text(
-                          response['title'] ?? 'No Title',
-                          style: const TextStyle(color: Colors.white),
+                  crossAxisAlignment: CrossAxisAlignment.stretch, // Make all children stretch full width
+                  children: [
+                    // Agent Feedback Card
+                    if (_agentFeedback != null &&
+                        _agentFeedback!['feedback'] is List<dynamic>)
+                      Card(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        color: const Color.fromARGB(255, 2, 47, 181),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        subtitle: Text(
-                          response['description'] ?? 'No Description',
-                          style: const TextStyle(color: Colors.white70),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Agent Feedback ✨',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Query: ${_agentFeedback!['query'] ?? 'No query'}',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              const SizedBox(height: 8),
+                              ...(_agentFeedback!['feedback'] as List<dynamic>)
+                                  .map((point) => Padding(
+                                        padding: const EdgeInsets.only(bottom: 4),
+                                        child: Text(
+                                          point.toString(),
+                                          style: const TextStyle(
+                                              color: Colors.white70),
+                                        ),
+                                      ))
+                                  .toList(),
+                            ],
+                          ),
                         ),
                       ),
-                    );
-                  }).toList(),
+
+                    // Regular responses
+                    ..._responses.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final response = entry.value;
+                      return Card(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        color: _getCardColor(index),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            response['title'] ?? 'No Title',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          subtitle: Text(
+                            response['description'] ?? 'No Description',
+                            style: const TextStyle(color: Colors.white70),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ],
                 ),
               ),
             ),

@@ -33,7 +33,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   ];
 
   String _username = '';
-  bool _showSocialAppWidget = false; // State to toggle SidePanel content
+  bool _showSocialAppWidget = true; // State to toggle SidePanel content
 
   @override
   void initState() {
