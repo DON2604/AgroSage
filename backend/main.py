@@ -5,10 +5,11 @@ from agents.weather_agent import w_agent
 from agents.market_trend_agent import market_trend_analyzer
 from agents.carbon_footprint_agent import carbon_footprint_analyzer
 from agents.water_usage import water_usage_tracker_agent
+from agents.feedback_agent import feedback_agent
 from agents.decision_agent import DecisionAgent
 from modules.auth_handler import register_user, login_user
-from modules.ticket_handler import create_ticket, get_all_tickets  # Import ticket handling functions
-from modules.response_handler import get_responses  # Import response handler
+from modules.ticket_handler import create_ticket, get_all_tickets 
+from modules.response_handler import get_responses 
 import os
 import threading
 import time
@@ -86,6 +87,26 @@ def water_usage():
     result = water_usage_tracker_agent()
     cleaned_result = decision_agent.analyze_and_clean(result,"water")
     return jsonify(cleaned_result)
+
+@app.route('/feedback', methods=['GET', 'POST'])
+def process_feedback():
+    if request.method == 'POST':
+        data = request.get_json()
+        query = data.get('query', '')
+        
+        if not query:
+            return jsonify({"success": False, "message": "Query is required"}), 400
+            
+        result = feedback_agent(query)
+        return jsonify({"success": True, "data": result}), 200
+    else:
+        query = request.args.get('query', '')
+        
+        if not query:
+            return jsonify({"success": False, "message": "Query parameter is required"}), 400
+            
+        result = feedback_agent(query)
+        return jsonify({"success": True, "data": result}), 200
 
 @app.route('/api/register', methods=['POST'])
 def register():
