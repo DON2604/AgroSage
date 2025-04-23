@@ -3,19 +3,21 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"assets/AssetManifest.json": "052819a2e25171a40215b56dc884b5c5",
-"assets/AssetManifest.bin": "9493ad03e9a30122cf1434d9d04893c2",
+const RESOURCES = {"assets/AssetManifest.json": "42eea7f293fcf303cc660c2939a9e694",
+"assets/AssetManifest.bin": "f9f906dbc42da72a79fa8b941ad27262",
+"assets/assets/wave.gif": "d850ebbfc35ff3b11c8517b3683f6b84",
 "assets/assets/bg.jpg": "6946f779ff266046a4ee9a164c314753",
 "assets/assets/rice.webp": "fc0da10528dd8388e7530348d6b35bb5",
 "assets/assets/wheat.jpg": "c9d2bf264e19f58bd173798426c10c7f",
 "assets/assets/soybean.jpg": "ad416ca5c962b26c18e67b3203fe260d",
 "assets/assets/image.png": "a5d402cb524516d918aa6e50b74a83d2",
 "assets/assets/corn.jpeg": "7d726b85392dd769ee78dd04951f39ab",
+"assets/assets/agent.gif": "0b8d64dc6441d7b5c5f1980278fdb860",
 "assets/assets/asset1.png": "c00abcc37971c9417cee4d14500f1c5b",
 "assets/assets/farm_logo.png": "d0cf0181f135c424474b59b92428da77",
 "assets/FontManifest.json": "3ddd9b2ab1c2ae162d46e3cc7b78ba88",
-"assets/fonts/MaterialIcons-Regular.otf": "a1dfbf7e4c64e83adaa03b0cd688c762",
-"assets/AssetManifest.bin.json": "4398a53f09cc7ad0d7278eac04562cca",
+"assets/fonts/MaterialIcons-Regular.otf": "ee3751f7fe3e97193895a7b748eab168",
+"assets/AssetManifest.bin.json": "bbfa94303a1e571b9ab913c423f7ea48",
 "assets/shaders/ink_sparkle.frag": "ecc85a2e95f5e9f53123dcaf8cb9b6ce",
 "assets/NOTICES": "eb15e38c6be97e1c3c1082f8c03a006b",
 "assets/packages/font_awesome_flutter/lib/fonts/fa-brands-400.ttf": "4769f3245a24c1fa9965f113ea85ec2a",
@@ -38,13 +40,13 @@ const RESOURCES = {"assets/AssetManifest.json": "052819a2e25171a40215b56dc884b5c
 "canvaskit/skwasm_st.js.symbols": "c7e7aac7cd8b612defd62b43e3050bdd",
 "index.html": "da953823c34c15b5b9e8424921ff686d",
 "/": "da953823c34c15b5b9e8424921ff686d",
-"flutter_bootstrap.js": "e61b46e5e271ad473dc80a085707c867",
+"flutter_bootstrap.js": "8484d5b2414e917903b23dd2643909aa",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
-"main.dart.js": "b530fa7eb8bdccd9d94d59490504fda0"};
+"main.dart.js": "fec8c456b5c9fce1e6ef12f63eea29a7"};
 // The application shell files that are downloaded before a service worker can
 // start.
 const CORE = ["main.dart.js",
