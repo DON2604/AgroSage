@@ -61,13 +61,15 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
 
   Future<void> _sendTicket() async {
     final String query = _messageController.text;
+    if (query.isEmpty) return;
 
-    // Show the animation immediately
+    // Show animation immediately
     setState(() {
       _showAnimation = true;
     });
 
     try {
+      // First submit the ticket
       final url = Uri.parse('https://agrosage.pagekite.me/api/tickets');
       final response = await http.post(
         url,
@@ -86,8 +88,9 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
 
       if (response.statusCode == 201) {
         _messageController.clear();
-        _fetchTickets();
-        // Fetch agent feedback and only hide animation when feedback is loaded
+        await _fetchTickets();
+        
+        // Then fetch agent feedback
         await _fetchAgentFeedback(query);
       } else {
         print('Failed to send ticket: ${response.body}');
@@ -105,54 +108,58 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
     }
   }
 
-  Future<void> _fetchAgentFeedback(String query) async {
-    try {
-      final url = Uri.parse('https://agrosage.pagekite.me/feedback');
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'User-Agent': 'PostmanRuntime/7.36.0',
-          'ngrok-skip-browser-warning': 'true',
-        },
-        body: jsonEncode({
-          "query": query
-        }),
-      );
+Future<void> _fetchAgentFeedback(String query) async {
+  try {
+    final url = Uri.parse('https://agrosage.pagekite.me/feedback');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'User-Agent': 'PostmanRuntime/7.36.0',
+        'ngrok-skip-browser-warning': 'true',
+      },
+      body: jsonEncode({
+        "query": query
+      }),
+    );
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = jsonDecode(response.body);
-        // Extract the 'data' field, which contains the actual feedback
-        final Map<String, dynamic>? feedbackData = responseData['data'];
-        if (feedbackData != null && responseData['success'] == true) {
-          setState(() {
-            _agentFeedback = feedbackData; // Store feedbackData (contains query, feedback, timestamp)
-            _showAnimation = false; // Hide animation after feedback is loaded
-          });
-          print('Agent feedback received: $feedbackData');
-        } else {
-          print('Feedback data is null or success is false: ${response.body}');
-          setState(() {
-            _agentFeedback = null; // Reset feedback if invalid
-            _showAnimation = false; // Hide animation if invalid feedback
-          });
-        }
-      } else {
-        print('Failed to fetch agent feedback: ${response.body}');
+    print('Feedback API response status: ${response.statusCode}');
+    print('Feedback API response body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      // Access the nested 'data' field
+      final Map<String, dynamic>? feedbackData = responseData['data']?['data'];
+
+      if (feedbackData != null && responseData['success'] == true) {
+        print('Setting agent feedback: $feedbackData');
         setState(() {
-          _agentFeedback = null; // Reset feedback on failure
-          _showAnimation = false; // Hide animation on failure
+          _agentFeedback = feedbackData; // Store the inner data object
+          _showAnimation = false; // Hide animation after feedback is loaded
+        });
+      } else {
+        print('Invalid feedback data: ${response.body}');
+        setState(() {
+          _agentFeedback = null;
+          _showAnimation = false;
         });
       }
-    } catch (e) {
-      print('Error fetching agent feedback: $e');
+    } else {
+      print('Failed to fetch agent feedback: ${response.body}');
       setState(() {
-        _agentFeedback = null; // Reset feedback on error
-        _showAnimation = false; // Hide animation on error
+        _agentFeedback = null;
+        _showAnimation = false;
       });
     }
+  } catch (e) {
+    print('Error fetching agent feedback: $e');
+    setState(() {
+      _agentFeedback = null;
+      _showAnimation = false;
+    });
   }
+}
 
   Future<void> _fetchTickets() async {
     final url = Uri.parse('https://agrosage.pagekite.me/api/tickets');
@@ -280,7 +287,6 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
                 children: [
                   _buildHeader(),
                   _buildInputField(),
-                  _buildTimeOptions(),
                   _buildTicketsList(),
                   _buildGreenLine(),
                   _buildResponsesSection(),
@@ -361,8 +367,8 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
                 ),
                 cursorColor: Colors.green,
                 decoration: const InputDecoration(
-                  hintText: 'Type your message...',
-                  hintStyle: TextStyle(color: Color.fromARGB(255, 15, 32, 1)),
+                  hintText: 'Raise your query ticket here...',
+                  hintStyle: TextStyle(color: Color.fromARGB(255, 27, 56, 2)),
                   border: InputBorder.none,
                 ),
               ),
@@ -444,6 +450,7 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
             const Text('No tickets available.')
           else
             ..._tickets.map((ticket) => Card(
+              color: const Color.fromARGB(205, 101, 37, 141), 
                   child: ListTile(
                     title: Text(ticket['title'] ?? 'No Title'),
                     subtitle: Text(ticket['description'] ?? 'No Description'),
@@ -486,11 +493,9 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
               height: 270,
               child: SingleChildScrollView(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch, // Make all children stretch full width
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Agent Feedback Card
-                    if (_agentFeedback != null &&
-                        _agentFeedback!['feedback'] is List<dynamic>)
+                    if (_agentFeedback != null)
                       Card(
                         margin: const EdgeInsets.only(bottom: 8),
                         color: const Color.fromARGB(255, 2, 47, 181),
@@ -516,16 +521,21 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
                                 style: const TextStyle(color: Colors.white),
                               ),
                               const SizedBox(height: 8),
-                              ...(_agentFeedback!['feedback'] as List<dynamic>)
+                              if (_agentFeedback!['feedback'] is List<dynamic>)
+                                ...(_agentFeedback!['feedback'] as List<dynamic>)
                                   .map((point) => Padding(
                                         padding: const EdgeInsets.only(bottom: 4),
                                         child: Text(
                                           point.toString(),
-                                          style: const TextStyle(
-                                              color: Colors.white70),
+                                          style: const TextStyle(color: Colors.white70),
                                         ),
                                       ))
-                                  .toList(),
+                                  .toList()
+                              else
+                                Text(
+                                  _agentFeedback!['feedback']?.toString() ?? 'No feedback details',
+                                  style: const TextStyle(color: Colors.white70),
+                                ),
                             ],
                           ),
                         ),
