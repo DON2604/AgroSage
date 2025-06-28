@@ -44,21 +44,35 @@ search_tool = Tool(
 def market_trend_analyzer(crop_type):
     querycropstr = ""
     db_chain = SQLDatabaseChain.from_llm(llm2, db, verbose=True)
-    qns1 = db_chain("GIVE ONLY THE SQL QUERY to find the Crop_Type with respect to Market_Price_per_ton, Demand_Index, Supply_Index in descending order")
+
+    # ✅ Safer prompt to avoid backticks or markdown
+    query_prompt = {
+        "query": """
+        Write a raw SQL query (no explanation, no markdown, no backticks) to select Crop_Type along with Market_Price_per_ton, Demand_Index, and Supply_Index 
+        from farm_advisory and market_research tables joined on Crop_Type = Product. 
+        Order by Market_Price_per_ton DESC, Demand_Index DESC, Supply_Index DESC. 
+        Limit 5.
+        """
+    }
+
+    # ✅ Use invoke to avoid deprecation warning
+    qns1 = db_chain.invoke(query_prompt)
+
     print(qns1['result'])
     gen_query = extract_sql_query(qns1["result"])
     querydata = run_query(gen_query)
+
     for i in querydata:
-        querycropstr = querycropstr + " " + i[0]  
+        querycropstr += " " + i[0]
 
     market_analysis_prompt = PromptTemplate(
         input_variables=["crop_type"],
         template="""
         Analyze the market trends for {crop_type} in the market_data table, including the parameters 
         (Market_Price_per_ton, Demand_Index, Supply_Index, Competitor_Price_per_ton, Economic_Indicator, Weather_Impact_Score, Seasonal_Factor, Consumer_Trend_Index).
-        
+
         Provide the response strictly in this format:
-        - Rising or non rising inedex Analysis: <True (if rising)/False (if going down), reason 1 line>
+        - Rising or non rising index Analysis: <True (if rising)/False (if going down), reason 1 line>
         """
     )
 
@@ -70,46 +84,34 @@ def market_trend_analyzer(crop_type):
         List the top 3 extra crops by average market performance in the market_data table, and compare their parameters 
         (Market_Price_per_ton, Demand_Index, Supply_Index, Competitor_Price_per_ton, Economic_Indicator, Weather_Impact_Score, Seasonal_Factor, Consumer_Trend_Index) 
         with those of {crop_type}, considering the context of these crops: {querycropstr}.
-        
+
         Provide the response strictly in this format:
         - Top 3 Crops: <list of crops with average market performance>
-        - Parameters Comparison: < abide by this example:
-            -<Crop 1>:
-            - Parameters: <example output exactly like this : Corn: Market_Price_per_ton (300), Demand_Index (150), Supply_Index (80), Competitor_Price_per_ton (280), Economic_Indicator (1.1), Weather_Impact_Score (50), Seasonal_Factor (Medium), Consumer_Trend_Index (120)>
-            -<Crop 2>:
-            - Parameters: <example output exactly like this : Corn: Market_Price_per_ton (300), Demand_Index (150), Supply_Index (80), Competitor_Price_per_ton (280), Economic_Indicator (1.1), Weather_Impact_Score (50), Seasonal_Factor (Medium), Consumer_Trend_Index (120)>
-            -<Crop 3>:
-            - Parameters: <example output exactly like this : Corn: Market_Price_per_ton (300), Demand_Index (150), Supply_Index (80), Competitor_Price_per_ton (280), Economic_Indicator (1.1), Weather_Impact_Score (50), Seasonal_Factor (Medium), Consumer_Trend_Index (120)>
-            >
+        - Parameters Comparison:
+          - <Crop 1>: Parameters: Corn: Market_Price_per_ton (300), Demand_Index (150), Supply_Index (80), Competitor_Price_per_ton (280), Economic_Indicator (1.1), Weather_Impact_Score (50), Seasonal_Factor (Medium), Consumer_Trend_Index (120)
+          - <Crop 2>: ...
+          - <Crop 3>: ...
         - Insights: <short comparison summary 1 line>
         """
     )
 
     top3_market_comparison_chain = top3_market_comparison_prompt | llm
-    
+
     web_market_trends_prompt = PromptTemplate(
         input_variables=["crop_type"],
         template="""
         Research recent market trends focusing on {crop_type} and identify 
         2 other crops that are currently trending for their market performance (with reasons why they're trending).
         For all 3 crops ({crop_type} plus 2 trending crops), provide analysis in EXACTLY this format nothing additional:
-        
+
         - Trending Crops:
           - {crop_type}: 
-            - Parameters: <example output exactly like this : Corn: Market_Price_per_ton (300), Demand_Index (150), Supply_Index (80), Competitor_Price_per_ton (280), Economic_Indicator (1.1), Weather_Impact_Score (50), Seasonal_Factor (Medium), Consumer_Trend_Index (120)>
+            - Parameters: Corn: Market_Price_per_ton (300), Demand_Index (150), Supply_Index (80), Competitor_Price_per_ton (280), Economic_Indicator (1.1), Weather_Impact_Score (50), Seasonal_Factor (Medium), Consumer_Trend_Index (120)
             - Strength: <main market strength>
-            - Rising percentage: <percentage rice than {crop_type}>
+            - Rising percentage: <percentage rise than {crop_type}>
             - Source: <source mentioning this>
-          - <Crop 1>:
-            - Parameters: <example output exactly like this : Corn: Market_Price_per_ton (300), Demand_Index (150), Supply_Index (80), Competitor_Price_per_ton (280), Economic_Indicator (1.1), Weather_Impact_Score (50), Seasonal_Factor (Medium), Consumer_Trend_Index (120)>
-            - Strength: <why trending just few words>
-            - Rising percentage: <percentage rice than {crop_type}>
-            - Source: <just name source mentioning this>
-          - <Crop 2>:
-            - Parameters: <Market_Price_per_ton, Demand_Index, Supply_Index>
-            - Strength: <why trending just few words>
-            - Rising percentage: <percentage rice than {crop_type}>
-            - Source: <just name source mentioning this 1 line>
+          - <Crop 1>: ...
+          - <Crop 2>: ...
         """
     )
 
@@ -128,14 +130,15 @@ def market_trend_analyzer(crop_type):
 
     analysis_result = analysis_chain.invoke({
         "crop_type": crop_type,
-        "querycropstr": querycropstr.strip()  
+        "querycropstr": querycropstr.strip()
     })
 
-
+    # Store results
     store_crux("market_trend_agent_market_analysis", analysis_result["market_analysis"].content.strip(), update=True)
     store_crux("market_trend_agent_top3_comparison", analysis_result["top3_market_comparison"].content.strip(), update=True)
     store_crux("market_trend_agent_web_trends", analysis_result["web_market_trends"].content.strip(), update=True)
 
+    # Print & return results
     print(analysis_result["market_analysis"].content.strip())
     print(analysis_result["top3_market_comparison"].content.strip())
     print(analysis_result["web_market_trends"].content.strip())
