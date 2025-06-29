@@ -16,7 +16,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isLoading = false;
   String? _errorMessage;
 
-  final String apiBaseUrl = 'https://agrosage.pagekite.me/api';
+  final String apiBaseUrl = 'https://ae3e-103-51-148-129.ngrok-free.app/api';
 
   Future<void> _register() async {
     setState(() {

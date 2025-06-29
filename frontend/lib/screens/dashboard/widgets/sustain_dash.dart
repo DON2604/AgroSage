@@ -31,7 +31,7 @@ class _SustainabilityDashboardState extends State<SustainabilityDashboard> {
 
     try {
       final response = await http
-          .get(Uri.parse('https://agrosage.pagekite.me/sustainability'),
+          .get(Uri.parse('https://ae3e-103-51-148-129.ngrok-free.app/sustainability'),
           headers: {
         'Accept': 'application/json',
         'User-Agent': 'PostmanRuntime/7.36.0', 

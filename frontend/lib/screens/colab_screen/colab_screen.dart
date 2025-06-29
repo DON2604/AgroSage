@@ -70,7 +70,7 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
 
     try {
       // First submit the ticket
-      final url = Uri.parse('https://agrosage.pagekite.me/api/tickets');
+      final url = Uri.parse('https://ae3e-103-51-148-129.ngrok-free.app/api/tickets');
       final response = await http.post(
         url,
         headers: {
@@ -110,7 +110,7 @@ class _SocialAppWidgetState extends State<SocialAppWidget> {
 
 Future<void> _fetchAgentFeedback(String query) async {
   try {
-    final url = Uri.parse('https://agrosage.pagekite.me/feedback');
+    final url = Uri.parse('https://ae3e-103-51-148-129.ngrok-free.app/feedback');
     final response = await http.post(
       url,
       headers: {
@@ -162,7 +162,7 @@ Future<void> _fetchAgentFeedback(String query) async {
 }
 
   Future<void> _fetchTickets() async {
-    final url = Uri.parse('https://agrosage.pagekite.me/api/tickets');
+    final url = Uri.parse('https://ae3e-103-51-148-129.ngrok-free.app/api/tickets');
     final response = await http.get(
       url,
       headers: {
@@ -189,7 +189,7 @@ Future<void> _fetchAgentFeedback(String query) async {
       });
     }
 
-    final url = Uri.parse('https://agrosage.pagekite.me/api/responses');
+    final url = Uri.parse('https://ae3e-103-51-148-129.ngrok-free.app/api/responses');
     final response = await http.get(
       url,
       headers: {
