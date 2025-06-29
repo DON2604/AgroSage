@@ -47,7 +47,7 @@ AgroSage is an intelligent, end-to-end agricultural advisory system designed to 
 ## 🏗️ Project Structure
 
 ```
-don2604-accenture_hack/
+don2604-AgroSage/
 ├── backend/
 │   ├── main.py                     # Entry point: defines API endpoints
 │   ├── agents/                     # Domain-specific AI agents
@@ -76,8 +76,8 @@ don2604-accenture_hack/
 ## 📦 Installation
 
 ```bash
-git clone https://github.com/DON2604/don2604-accenture_hack.git
-cd don2604-accenture_hack/backend
+git clone https://github.com/DON2604/AgroSage.git
+cd AgroSage/backend
 pip install -r requirements.txt
 python main.py
 ```
