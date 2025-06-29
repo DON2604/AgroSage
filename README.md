@@ -113,14 +113,6 @@ python main.py
 
 ---
 
-## 🤝 Contributors
-
-- [@DON2604](https://github.com/DON2604)
-- [@Nidhi Sikder](https://github.com/nidhisikder)
-- Built for Accenture Hackathon 2025
-
----
-
 ## 📜 License
 
 This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
