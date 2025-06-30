@@ -40668,7 +40668,7 @@ f=g.a.a
 if(J.cc(f)===0){s=1
 break}n.Z(new A.aqZ(n))
 p=4
-m=A.dq("https://ae3e-103-51-148-129.ngrok-free.app/api/tickets",0,null)
+m=A.dq("https://ed3c-103-51-148-129.ngrok-free.app/api/tickets",0,null)
 j=t.N
 i=A.af(["Content-Type","application/json","Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],j,j)
 s=7
@@ -40705,7 +40705,7 @@ wE(a){return this.a6U(a)},
 a6U(a){var s=0,r=A.P(t.H),q=1,p=[],o=this,n,m,l,k,j,i,h,g,f
 var $async$wE=A.L(function(b,c){if(b===1){p.push(c)
 s=q}while(true)switch(s){case 0:q=3
-n=A.dq("https://ae3e-103-51-148-129.ngrok-free.app/feedback",0,null)
+n=A.dq("https://ed3c-103-51-148-129.ngrok-free.app/feedback",0,null)
 i=t.N
 h=A.af(["Content-Type","application/json","Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],i,i)
 s=6
@@ -40742,7 +40742,7 @@ ru(){var s=0,r=A.P(t.H),q=this,p,o
 var $async$ru=A.L(function(a,b){if(a===1)return A.M(b,r)
 while(true)switch(s){case 0:p=t.N
 s=2
-return A.Q(A.wE(A.dq("https://ae3e-103-51-148-129.ngrok-free.app/api/tickets",0,null),A.af(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],p,p)),$async$ru)
+return A.Q(A.wE(A.dq("https://ed3c-103-51-148-129.ngrok-free.app/api/tickets",0,null),A.af(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],p,p)),$async$ru)
 case 2:o=b
 if(o.b===200)q.Z(new A.aqY(q,o))
 else A.eK("Failed to fetch tickets: "+A.fv(A.ft(o.e).c.a.h(0,"charset")).ca(o.w))
@@ -40755,7 +40755,7 @@ var $async$oR=A.L(function(b,c){if(b===1)return A.M(c,r)
 while(true)switch(s){case 0:if(J.jr(q.f)||a!=q.x)q.Z(new A.aqT(q))
 p=t.N
 s=2
-return A.Q(A.wE(A.dq("https://ae3e-103-51-148-129.ngrok-free.app/api/responses",0,null),A.af(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],p,p)),$async$oR)
+return A.Q(A.wE(A.dq("https://ed3c-103-51-148-129.ngrok-free.app/api/responses",0,null),A.af(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],p,p)),$async$oR)
 case 2:o=c
 if(o.b===200){n=J.cb(B.ao.pG(A.fv(A.ft(o.e).c.a.h(0,"charset")).ca(o.w),null),"responses")
 if(n==null)n=[]
@@ -40957,7 +40957,7 @@ var $async$wF=A.L(function(a,b){if(a===1){p.push(b)
 s=q}while(true)switch(s){case 0:q=3
 l=t.N
 s=6
-return A.Q(A.wE(A.dq("https://ae3e-103-51-148-129.ngrok-free.app/carbon-footprint",0,null),A.af(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],l,l)),$async$wF)
+return A.Q(A.wE(A.dq("https://ed3c-103-51-148-129.ngrok-free.app/carbon-footprint",0,null),A.af(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],l,l)),$async$wF)
 case 6:n=b
 if(n.b===200)o.Z(new A.ak3(o,n))
 else o.Z(new A.ak4(o,n))
@@ -41131,7 +41131,7 @@ s=q}while(true)switch(s){case 0:o.Z(new A.anQ(o))
 q=3
 k=t.N
 s=6
-return A.Q(A.wE(A.dq("https://ae3e-103-51-148-129.ngrok-free.app/market-trends",0,null),A.af(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qx(B.Gb),$async$rs)
+return A.Q(A.wE(A.dq("https://ed3c-103-51-148-129.ngrok-free.app/market-trends",0,null),A.af(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qx(B.Gb),$async$rs)
 case 6:n=b
 if(n.b===200){k=n
 m=B.ao.ca(A.fv(A.ft(k.e).c.a.h(0,"charset")).ca(k.w))
@@ -41382,7 +41382,7 @@ s=q}while(true)switch(s){case 0:o.Z(new A.arr(o))
 q=3
 k=t.N
 s=6
-return A.Q(A.wE(A.dq("https://ae3e-103-51-148-129.ngrok-free.app/sustainability",0,null),A.af(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qx(B.Gh),$async$rt)
+return A.Q(A.wE(A.dq("https://ed3c-103-51-148-129.ngrok-free.app/sustainability",0,null),A.af(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qx(B.Gh),$async$rt)
 case 6:n=b
 if(n.b===200){k=n
 m=B.ao.ca(A.fv(A.ft(k.e).c.a.h(0,"charset")).ca(k.w))
@@ -41602,7 +41602,7 @@ s=q}while(true)switch(s){case 0:o.Z(new A.asF(o))
 q=3
 k=t.N
 s=6
-return A.Q(A.wE(A.dq("https://ae3e-103-51-148-129.ngrok-free.app/water-usage",0,null),A.af(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qx(B.nQ),$async$rv)
+return A.Q(A.wE(A.dq("https://ed3c-103-51-148-129.ngrok-free.app/water-usage",0,null),A.af(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],k,k)).qx(B.nQ),$async$rv)
 case 6:n=b
 if(n.b===200){k=n
 m=B.ao.ca(A.fv(A.ft(k.e).c.a.h(0,"charset")).ca(k.w))
@@ -41753,7 +41753,7 @@ rw(){var s=0,r=A.P(t.H),q=1,p=[],o=this,n,m,l,k,j,i,h
 var $async$rw=A.L(function(a,b){if(a===1){p.push(b)
 s=q}while(true)switch(s){case 0:o.Z(new A.apP(o))
 q=3
-n=A.dq("https://ae3e-103-51-148-129.ngrok-free.app/weather",0,null)
+n=A.dq("https://ed3c-103-51-148-129.ngrok-free.app/weather",0,null)
 j=t.N
 s=6
 return A.Q(A.wE(n,A.af(["Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],j,j)).qx(B.nQ),$async$rw)
@@ -41885,7 +41885,7 @@ lS(){var s=0,r=A.P(t.H),q=1,p=[],o=[],n=this,m,l,k,j,i,h,g,f,e
 var $async$lS=A.L(function(a,b){if(a===1){p.push(b)
 s=q}while(true)switch(s){case 0:n.Z(new A.ans(n))
 q=3
-i=A.dq("https://ae3e-103-51-148-129.ngrok-free.app/api/login",0,null)
+i=A.dq("https://ed3c-103-51-148-129.ngrok-free.app/api/login",0,null)
 h=t.N
 g=A.af(["Content-Type","application/json"],h,h)
 s=6
@@ -42004,7 +42004,7 @@ xt(){var s=0,r=A.P(t.H),q=1,p=[],o=[],n=this,m,l,k,j,i,h,g,f
 var $async$xt=A.L(function(a,b){if(a===1){p.push(b)
 s=q}while(true)switch(s){case 0:n.Z(new A.ap2(n))
 q=3
-j=A.dq("https://ae3e-103-51-148-129.ngrok-free.app/api/register",0,null)
+j=A.dq("https://ed3c-103-51-148-129.ngrok-free.app/api/register",0,null)
 i=t.N
 h=A.af(["Content-Type","application/json","Accept","application/json","User-Agent","PostmanRuntime/7.36.0","ngrok-skip-browser-warning","true"],i,i)
 s=6
